@@ -31,15 +31,26 @@ const queryClient = new QueryClient({
   },
 });
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const ProtectedAppRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
   if (isLoading) {
-    return <div className="min-h-screen bg-[#0B0F17] flex items-center justify-center text-xs font-mono text-slate-400">Loading SentinelAI Session...</div>;
+    return <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center text-xs font-mono text-slate-900">Loading SentinelAI Session...</div>;
   }
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
   return <SOCLayout>{children}</SOCLayout>;
+};
+
+const ProtectedStandaloneRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated, isLoading } = useAuthStore();
+  if (isLoading) {
+    return <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center text-xs font-mono text-slate-900">Loading SentinelAI Session...</div>;
+  }
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  return <>{children}</>;
 };
 
 export const App: React.FC = () => {
@@ -53,30 +64,28 @@ export const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/landing" element={<ProtectedRoute><LandingPage /></ProtectedRoute>} />
+          <Route path="/" element={<ProtectedStandaloneRoute><LandingPage /></ProtectedStandaloneRoute>} />
+          <Route path="/landing" element={<ProtectedStandaloneRoute><LandingPage /></ProtectedStandaloneRoute>} />
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<ProtectedRoute><LandingPage /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/executive" element={<ProtectedRoute><ExecutiveDashboard /></ProtectedRoute>} />
-          <Route path="/live" element={<ProtectedRoute><LiveMonitoring /></ProtectedRoute>} />
-          <Route path="/explorer" element={<ProtectedRoute><ThreatExplorer /></ProtectedRoute>} />
-          <Route path="/alerts" element={<ProtectedRoute><Alerts /></ProtectedRoute>} />
-          <Route path="/alerts/:id" element={<ProtectedRoute><AlertDetail /></ProtectedRoute>} />
-          <Route path="/incidents" element={<ProtectedRoute><Incidents /></ProtectedRoute>} />
-          <Route path="/users" element={<ProtectedRoute><UsersPage /></ProtectedRoute>} />
-          <Route path="/users/:id" element={<ProtectedRoute><UserDetail /></ProtectedRoute>} />
-          <Route path="/devices" element={<ProtectedRoute><DevicesPage /></ProtectedRoute>} />
-          <Route path="/devices/:id" element={<ProtectedRoute><DeviceDetail /></ProtectedRoute>} />
-          <Route path="/profiles" element={<ProtectedRoute><BehaviorProfiles /></ProtectedRoute>} />
-          <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-          <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
-          <Route path="/health" element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedAppRoute><Dashboard /></ProtectedAppRoute>} />
+          <Route path="/executive" element={<ProtectedAppRoute><ExecutiveDashboard /></ProtectedAppRoute>} />
+          <Route path="/live" element={<ProtectedAppRoute><LiveMonitoring /></ProtectedAppRoute>} />
+          <Route path="/explorer" element={<ProtectedAppRoute><ThreatExplorer /></ProtectedAppRoute>} />
+          <Route path="/alerts" element={<ProtectedAppRoute><Alerts /></ProtectedAppRoute>} />
+          <Route path="/alerts/:id" element={<ProtectedAppRoute><AlertDetail /></ProtectedAppRoute>} />
+          <Route path="/incidents" element={<ProtectedAppRoute><Incidents /></ProtectedAppRoute>} />
+          <Route path="/users" element={<ProtectedAppRoute><UsersPage /></ProtectedAppRoute>} />
+          <Route path="/users/:id" element={<ProtectedAppRoute><UserDetail /></ProtectedAppRoute>} />
+          <Route path="/devices" element={<ProtectedAppRoute><DevicesPage /></ProtectedAppRoute>} />
+          <Route path="/devices/:id" element={<ProtectedAppRoute><DeviceDetail /></ProtectedAppRoute>} />
+          <Route path="/profiles" element={<ProtectedAppRoute><BehaviorProfiles /></ProtectedAppRoute>} />
+          <Route path="/analytics" element={<ProtectedAppRoute><Analytics /></ProtectedAppRoute>} />
+          <Route path="/reports" element={<ProtectedAppRoute><Reports /></ProtectedAppRoute>} />
+          <Route path="/health" element={<ProtectedAppRoute><SystemHealth /></ProtectedAppRoute>} />
+          <Route path="/settings" element={<ProtectedAppRoute><Settings /></ProtectedAppRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
   );
 };
-
-export default App;

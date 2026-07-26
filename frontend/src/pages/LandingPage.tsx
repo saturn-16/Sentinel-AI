@@ -154,7 +154,7 @@ export const LandingPage: React.FC = () => {
 
           <div className="flex items-center gap-3">
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/dashboard')}
               className="px-5 py-2.5 bg-black hover:bg-red-600 text-white text-xs font-mono font-bold uppercase tracking-wider transition-colors flex items-center gap-2"
             >
               LAUNCH DASHBOARD <ArrowRight className="w-3.5 h-3.5" />
@@ -208,7 +208,7 @@ export const LandingPage: React.FC = () => {
             </div>
             <div className="flex items-center gap-3">
               <button
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/dashboard')}
                 className="px-8 py-3 bg-red-600 hover:bg-black text-white font-mono font-bold text-xs uppercase tracking-widest transition-colors flex items-center gap-2"
               >
                 ACCESS SOC DASHBOARD <ArrowRight className="w-4 h-4" />
@@ -410,7 +410,7 @@ export const LandingPage: React.FC = () => {
             </div>
 
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/dashboard')}
               className="group relative w-32 h-32 md:w-44 md:h-44 rounded-full border-2 border-white/80 hover:border-red-600 hover:bg-red-600 flex items-center justify-center transition-all duration-300 transform hover:scale-105 shrink-0"
               aria-label="Open SentinelAI Dashboard"
             >
