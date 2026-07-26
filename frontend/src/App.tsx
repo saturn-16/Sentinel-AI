@@ -21,6 +21,7 @@ import { Reports } from './pages/Reports';
 import { SystemHealth } from './pages/SystemHealth';
 import { Settings } from './pages/Settings';
 import { Login } from './pages/Login';
+import { AIEvaluationReport } from './pages/AIEvaluationReport';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -83,6 +84,7 @@ export const App: React.FC = () => {
           <Route path="/reports" element={<ProtectedAppRoute><Reports /></ProtectedAppRoute>} />
           <Route path="/health" element={<ProtectedAppRoute><SystemHealth /></ProtectedAppRoute>} />
           <Route path="/settings" element={<ProtectedAppRoute><Settings /></ProtectedAppRoute>} />
+          <Route path="/evaluation" element={<ProtectedAppRoute><AIEvaluationReport /></ProtectedAppRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
