@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.env
+
+# Database & SQLite
+*.db
+*.sqlite3
+*.log
+
+# Node & Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+dist/
+.DS_Store
+
+# Machine Learning Checkpoints
+ml_models/*.joblib
+!ml_models/.gitkeep
+
+# IDE & System
+.vscode/
+.idea/
+*.swp
+*.swo
