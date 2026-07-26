@@ -19,7 +19,7 @@ export const SeverityPieChart: React.FC<SeverityPieChartProps> = ({ data }) => {
   }));
 
   return (
-    <div className="w-full h-64">
+    <div className="w-full h-64 font-mono text-xs">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
@@ -32,11 +32,11 @@ export const SeverityPieChart: React.FC<SeverityPieChartProps> = ({ data }) => {
             dataKey="value"
           >
             {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[entry.name] || '#3b82f6'} />
+              <Cell key={`cell-${index}`} fill={COLORS[entry.name] || '#ef4444'} />
             ))}
           </Pie>
-          <Tooltip contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', color: '#F3F4F6' }} />
-          <Legend verticalAlign="bottom" height={36} iconType="circle" />
+          <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#000000', borderWidth: '2px', borderRadius: '0px', color: '#000000', fontWeight: 'bold' }} />
+          <Legend verticalAlign="bottom" height={36} iconType="square" />
         </PieChart>
       </ResponsiveContainer>
     </div>

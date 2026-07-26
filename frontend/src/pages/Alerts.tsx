@@ -32,21 +32,21 @@ export const Alerts: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+    <div className="space-y-6 text-slate-900 font-sans">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-black pb-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-amber-400" />
-            SOC Alert Triage & Response
+          <h1 className="text-2xl font-black text-black tracking-tight flex items-center gap-2 uppercase">
+            <AlertTriangle className="w-5 h-5 text-red-600" />
+            SOC ALERT TRIAGE & RESPONSE
           </h1>
-          <p className="text-xs text-slate-400 mt-1">Manage, assign, and resolve automated behavioral anomaly alerts</p>
+          <p className="font-mono text-xs text-slate-600 mt-1 uppercase">Manage, assign, and resolve automated behavioral anomaly alerts</p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 font-mono text-xs">
           <select
             value={severityFilter}
             onChange={(e) => setSeverityFilter(e.target.value)}
-            className="bg-[#1A2234] border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:outline-none"
+            className="bg-white border-2 border-black px-3 py-1.5 font-bold text-black uppercase focus:outline-none"
           >
             <option value="">All Severities</option>
             <option value="Critical">Critical</option>
@@ -58,7 +58,7 @@ export const Alerts: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-[#1A2234] border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:outline-none"
+            className="bg-white border-2 border-black px-3 py-1.5 font-bold text-black uppercase focus:outline-none"
           >
             <option value="">All Statuses</option>
             <option value="Open">Open</option>
@@ -69,9 +69,9 @@ export const Alerts: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-[#111827] border border-slate-800 rounded-xl overflow-hidden shadow-sm">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-[#1A2234] text-slate-400 font-semibold uppercase border-b border-slate-800">
+      <div className="bg-white border-2 border-black overflow-hidden shadow-sm">
+        <table className="w-full text-left text-xs font-mono">
+          <thead className="bg-slate-100 text-black font-bold uppercase border-b-2 border-black">
             <tr>
               <th className="px-4 py-3">Alert Title</th>
               <th className="px-4 py-3">Severity</th>
@@ -81,17 +81,17 @@ export const Alerts: React.FC = () => {
               <th className="px-4 py-3 text-right">Quick Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-medium text-slate-300">
+          <tbody className="divide-y divide-slate-200 font-medium">
             {data.items.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
+                <td colSpan={6} className="px-4 py-8 text-center text-slate-500 uppercase">
                   No alerts matching specified triage criteria.
                 </td>
               </tr>
             ) : (
               data.items.map((alert: Alert) => (
-                <tr key={alert.id} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="px-4 py-3 font-bold text-slate-100 cursor-pointer" onClick={() => navigate(`/alerts/${alert.id}`)}>
+                <tr key={alert.id} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-4 py-3 font-bold text-black cursor-pointer" onClick={() => navigate(`/alerts/${alert.id}`)}>
                     {alert.title}
                   </td>
                   <td className="px-4 py-3">
@@ -100,19 +100,19 @@ export const Alerts: React.FC = () => {
                   <td className="px-4 py-3">
                     <StatusBadge status={alert.status} />
                   </td>
-                  <td className="px-4 py-3 text-slate-400 font-mono">{alert.assigned_to || 'Unassigned'}</td>
-                  <td className="px-4 py-3 font-mono text-slate-400">{new Date(alert.created_at).toLocaleString()}</td>
+                  <td className="px-4 py-3 text-slate-600 font-mono">{alert.assigned_to || 'Unassigned'}</td>
+                  <td className="px-4 py-3 font-mono text-slate-600">{new Date(alert.created_at).toLocaleString()}</td>
                   <td className="px-4 py-3 text-right space-x-2">
                     <button
                       onClick={() => navigate(`/alerts/${alert.id}`)}
-                      className="px-2.5 py-1 rounded bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/30 font-semibold text-[11px]"
+                      className="px-2.5 py-1 bg-black text-white hover:bg-red-600 font-bold text-[11px] uppercase"
                     >
                       Investigate
                     </button>
                     {alert.status !== 'Resolved' && (
                       <button
                         onClick={() => updateMutation.mutate({ id: alert.id, status: 'Resolved' })}
-                        className="px-2.5 py-1 rounded bg-emerald-950/40 text-emerald-400 border border-emerald-800/50 hover:bg-emerald-900/50 font-semibold text-[11px]"
+                        className="px-2.5 py-1 border border-black text-black hover:bg-black hover:text-white font-bold text-[11px] uppercase"
                       >
                         Resolve
                       </button>

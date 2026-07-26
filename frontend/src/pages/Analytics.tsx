@@ -16,67 +16,67 @@ export const Analytics: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="border-b border-slate-800 pb-4">
-        <h1 className="text-xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-blue-400" />
-          Machine Learning Performance & SOC Analytics
+    <div className="space-y-6 text-slate-900 font-sans">
+      <div className="border-b-2 border-black pb-4">
+        <h1 className="text-2xl font-black text-black tracking-tight flex items-center gap-2 uppercase">
+          <BarChart3 className="w-5 h-5 text-red-600" />
+          MACHINE LEARNING PERFORMANCE & SOC ANALYTICS
         </h1>
-        <p className="text-xs text-slate-400 mt-1">Enterprise model metrics, confusion matrix, and detection latency performance</p>
+        <p className="font-mono text-xs text-slate-600 mt-1 uppercase">Enterprise model metrics, confusion matrix, and detection latency performance</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <MetricCard title="Precision Score" value={`${(data.precision * 100).toFixed(1)}%`} subtext="True Positives / Total Positives" icon={Target} iconColor="text-emerald-400" />
-        <MetricCard title="Recall Score" value={`${(data.recall * 100).toFixed(1)}%`} subtext="True Positives / Actual Anomalies" icon={Activity} iconColor="text-blue-400" />
-        <MetricCard title="F1-Score Benchmark" value={(data.f1_score).toFixed(3)} subtext="Harmonic mean of precision & recall" icon={Zap} iconColor="text-amber-400" />
-        <MetricCard title="Detection Latency" value={`${data.detection_latency_ms}ms`} subtext="End-to-end event inference duration" icon={Cpu} iconColor="text-purple-400" />
+        <MetricCard title="Precision Score" value={`${(data.precision * 100).toFixed(1)}%`} subtext="True Positives / Total Positives" icon={Target} iconColor="text-red-600" />
+        <MetricCard title="Recall Score" value={`${(data.recall * 100).toFixed(1)}%`} subtext="True Positives / Actual Anomalies" icon={Activity} iconColor="text-red-600" />
+        <MetricCard title="F1-Score Benchmark" value={(data.f1_score).toFixed(3)} subtext="Harmonic mean of precision & recall" icon={Zap} iconColor="text-red-600" />
+        <MetricCard title="Detection Latency" value={`${data.detection_latency_ms}ms`} subtext="End-to-end event inference duration" icon={Cpu} iconColor="text-red-600" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-[#111827] border border-slate-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h2 className="text-sm font-bold text-slate-100 border-b border-slate-800 pb-3">Confusion Matrix Evaluation</h2>
+        <div className="bg-white border-2 border-black p-6 shadow-sm space-y-4">
+          <h2 className="text-sm font-black text-black uppercase border-b-2 border-black pb-3">Confusion Matrix Evaluation</h2>
           <div className="grid grid-cols-2 gap-4 font-mono text-center text-xs">
-            <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
-              <span className="text-slate-500 block text-[10px]">TRUE NEGATIVES</span>
-              <span className="text-xl font-bold text-emerald-400">1,248</span>
-              <span className="text-[10px] text-slate-500 block">Normal correctly classified</span>
+            <div className="p-4 bg-slate-50 border border-slate-300">
+              <span className="text-slate-500 block text-[10px] uppercase font-bold">TRUE NEGATIVES</span>
+              <span className="text-2xl font-black text-black">1,248</span>
+              <span className="text-[10px] text-slate-500 block uppercase">Normal correctly classified</span>
             </div>
-            <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
-              <span className="text-slate-500 block text-[10px]">FALSE POSITIVES</span>
-              <span className="text-xl font-bold text-amber-400">31</span>
-              <span className="text-[10px] text-slate-500 block">Rate: {data.false_positive_rate}%</span>
+            <div className="p-4 bg-slate-50 border border-slate-300">
+              <span className="text-slate-500 block text-[10px] uppercase font-bold">FALSE POSITIVES</span>
+              <span className="text-2xl font-black text-red-600">31</span>
+              <span className="text-[10px] text-slate-500 block uppercase">Rate: {data.false_positive_rate}%</span>
             </div>
-            <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
-              <span className="text-slate-500 block text-[10px]">FALSE NEGATIVES</span>
-              <span className="text-xl font-bold text-red-400">18</span>
-              <span className="text-[10px] text-slate-500 block">Missed anomalies</span>
+            <div className="p-4 bg-slate-50 border border-slate-300">
+              <span className="text-slate-500 block text-[10px] uppercase font-bold">FALSE NEGATIVES</span>
+              <span className="text-2xl font-black text-red-600">18</span>
+              <span className="text-[10px] text-slate-500 block uppercase">Missed anomalies</span>
             </div>
-            <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
-              <span className="text-slate-500 block text-[10px]">TRUE POSITIVES</span>
-              <span className="text-xl font-bold text-blue-400">289</span>
-              <span className="text-[10px] text-slate-500 block">Anomalies detected</span>
+            <div className="p-4 bg-slate-50 border border-slate-300">
+              <span className="text-slate-500 block text-[10px] uppercase font-bold">TRUE POSITIVES</span>
+              <span className="text-2xl font-black text-black">289</span>
+              <span className="text-[10px] text-slate-500 block uppercase">Anomalies detected</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-[#111827] border border-slate-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h2 className="text-sm font-bold text-slate-100 border-b border-slate-800 pb-3">Model Architecture Summary</h2>
+        <div className="bg-white border-2 border-black p-6 shadow-sm space-y-4 font-mono">
+          <h2 className="text-sm font-black text-black uppercase border-b-2 border-black pb-3">Model Architecture Specs</h2>
           <div className="space-y-3 text-xs">
-            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900 border border-slate-800">
-              <span className="font-bold text-slate-200">Primary Detector:</span>
-              <span className="font-mono text-blue-400">Isolation Forest (100 Trees)</span>
+            <div className="flex justify-between items-center py-2 border-b border-slate-200">
+              <span className="text-slate-600">ENSEMBLE ALGORITHMS</span>
+              <span className="font-bold text-black">Isolation Forest & One-Class SVM</span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900 border border-slate-800">
-              <span className="font-bold text-slate-200">Secondary Detector:</span>
-              <span className="font-mono text-blue-400">One-Class SVM (RBF Kernel)</span>
+            <div className="flex justify-between items-center py-2 border-b border-slate-200">
+              <span className="text-slate-600">FEATURE DIMENSIONS</span>
+              <span className="font-bold text-black">24 Continuous Features</span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900 border border-slate-800">
-              <span className="font-bold text-slate-200">Feature Vector Size:</span>
-              <span className="font-mono text-emerald-400">12 Dimensional Indicators</span>
+            <div className="flex justify-between items-center py-2 border-b border-slate-200">
+              <span className="text-slate-600">EXPLAINABILITY PIPELINE</span>
+              <span className="font-bold text-black">SHAP (SHapley Additive exPlanations)</span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900 border border-slate-800">
-              <span className="font-bold text-slate-200">Ensemble Weighting:</span>
-              <span className="font-mono text-purple-400">0.60 IF + 0.40 OCSVM</span>
+            <div className="flex justify-between items-center py-2 border-b border-slate-200">
+              <span className="text-slate-600">POLICY RULE WEIGHTING</span>
+              <span className="font-bold text-black">PyYAML Configurable Engine</span>
             </div>
           </div>
         </div>

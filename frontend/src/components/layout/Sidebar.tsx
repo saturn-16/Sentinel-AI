@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   ShieldAlert, LayoutDashboard, Radio, Search, AlertTriangle, FileText,
-  Users, HardDrive, UserCheck, BarChart3, Activity, Settings, ChevronLeft, ChevronRight, Award
+  Users, HardDrive, UserCheck, BarChart3, Activity, Settings, ChevronLeft, ChevronRight, Award, Globe
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -12,6 +12,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
   const navItems = [
+    { label: 'Landing Overview', path: '/landing', icon: Globe },
     { label: 'Dashboard', path: '/', icon: LayoutDashboard },
     { label: 'Executive Dashboard', path: '/executive', icon: Award },
     { label: 'Live Monitoring', path: '/live', icon: Radio },

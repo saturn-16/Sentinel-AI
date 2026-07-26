@@ -55,18 +55,18 @@ export const AlertDetail: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+    <div className="space-y-6 text-slate-900 font-sans">
+      <div className="flex items-center justify-between border-b-2 border-black pb-4">
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-slate-100 hover:bg-slate-700 transition-colors"
+            className="p-2 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div>
-            <h1 className="text-xl font-bold text-slate-100 tracking-tight">{alert.title}</h1>
-            <p className="text-xs text-slate-400">Alert Ref ID: {alert.id}</p>
+            <h1 className="text-2xl font-black text-black tracking-tight uppercase">{alert.title}</h1>
+            <p className="font-mono text-xs text-slate-600 uppercase">Alert Ref ID: {alert.id}</p>
           </div>
         </div>
 
@@ -76,49 +76,49 @@ export const AlertDetail: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 font-mono text-xs">
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-[#111827] p-6 rounded-xl border border-slate-800 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-blue-400" />
+          <div className="bg-white border-2 border-black p-6 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b-2 border-black pb-3">
+              <h2 className="text-sm font-black text-black uppercase flex items-center gap-2">
+                <Layers className="w-4 h-4 text-red-600" />
                 MITRE ATT&CK Framework Mapping
               </h2>
-              <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-blue-950/60 text-blue-400 border border-blue-800">
+              <span className="font-mono text-xs font-bold px-2 py-0.5 bg-red-50 text-red-600 border border-red-300 uppercase">
                 {mitre.technique_id}
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-              <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-                <span className="text-slate-500 block text-[10px]">TACTIC</span>
-                <span className="text-slate-200 font-bold">{mitre.tactic}</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="p-3 bg-slate-50 border border-slate-300">
+                <span className="text-slate-500 block text-[10px] uppercase font-bold">TACTIC</span>
+                <span className="text-black font-bold">{mitre.tactic}</span>
               </div>
-              <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-                <span className="text-slate-500 block text-[10px]">TECHNIQUE</span>
-                <span className="text-slate-200 font-bold">{mitre.technique}</span>
+              <div className="p-3 bg-slate-50 border border-slate-300">
+                <span className="text-slate-500 block text-[10px] uppercase font-bold">TECHNIQUE</span>
+                <span className="text-black font-bold">{mitre.technique}</span>
               </div>
-              <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-                <span className="text-slate-500 block text-[10px]">TECHNIQUE ID</span>
-                <span className="text-blue-400 font-bold">{mitre.technique_id}</span>
+              <div className="p-3 bg-slate-50 border border-slate-300">
+                <span className="text-slate-500 block text-[10px] uppercase font-bold">TECHNIQUE ID</span>
+                <span className="text-red-600 font-bold">{mitre.technique_id}</span>
               </div>
             </div>
 
-            <p className="text-xs text-slate-300 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80 leading-relaxed">
+            <p className="text-xs text-slate-700 bg-slate-50 p-3 border border-slate-300 leading-relaxed uppercase">
               {mitre.description}
             </p>
           </div>
 
-          <div className="bg-[#111827] p-6 rounded-xl border border-slate-800 space-y-4">
-            <h2 className="text-sm font-bold text-slate-100 border-b border-slate-800 pb-3">
+          <div className="bg-white border-2 border-black p-6 shadow-sm space-y-4">
+            <h2 className="text-sm font-black text-black uppercase border-b-2 border-black pb-3">
               Explainability Engine Findings
             </h2>
-            <div className="p-4 rounded-xl bg-[#141C2D] border border-blue-500/30 space-y-3">
-              <h3 className="font-bold text-slate-100 text-sm">{exp.summary_text || alert.title}</h3>
+            <div className="p-4 bg-red-50 border-2 border-red-300 space-y-3">
+              <h3 className="font-bold text-black text-sm uppercase">{exp.summary_text || alert.title}</h3>
               <div className="space-y-2">
                 {exp.reasons?.map((reason: string, idx: number) => (
-                  <div key={idx} className="flex items-start gap-2 text-xs text-slate-200">
-                    <AlertOctagon className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                  <div key={idx} className="flex items-start gap-2 text-xs text-slate-800">
+                    <AlertOctagon className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
                     <span>{reason}</span>
                   </div>
                 ))}
@@ -126,22 +126,22 @@ export const AlertDetail: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-[#111827] p-6 rounded-xl border border-slate-800 space-y-4">
-            <h2 className="text-sm font-bold text-slate-100 border-b border-slate-800 pb-3">
+          <div className="bg-white border-2 border-black p-6 shadow-sm space-y-4">
+            <h2 className="text-sm font-black text-black uppercase border-b-2 border-black pb-3">
               Recommended Remediation Protocol
             </h2>
-            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+            <div className="p-4 bg-white border-2 border-black space-y-2">
               {exp.suggested_actions?.map((act: string, idx: number) => (
-                <div key={idx} className="flex items-center gap-2 text-xs text-emerald-400 font-semibold">
-                  <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                <div key={idx} className="flex items-center gap-2 text-xs text-emerald-700 font-bold">
+                  <CheckCircle className="w-4 h-4 flex-shrink-0 text-emerald-600" />
                   <span>{act}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="bg-[#111827] p-6 rounded-xl border border-slate-800 space-y-4">
-            <h2 className="text-sm font-bold text-slate-100 border-b border-slate-800 pb-3">
+          <div className="bg-white border-2 border-black p-6 shadow-sm space-y-4">
+            <h2 className="text-sm font-black text-black uppercase border-b-2 border-black pb-3">
               SOC Analyst Investigation Log & Notes
             </h2>
             <form onSubmit={handleAddNote} className="flex gap-2">
@@ -150,19 +150,19 @@ export const AlertDetail: React.FC = () => {
                 value={analystNote}
                 onChange={(e) => setAnalystNote(e.target.value)}
                 placeholder="Add SOC investigation note or hypothesis..."
-                className="flex-1 bg-[#1A2234] border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500"
+                className="flex-1 bg-slate-50 border border-slate-300 px-3 py-2 text-xs text-black focus:outline-none focus:border-black"
               />
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white rounded-lg transition-colors flex items-center gap-1.5"
+                className="px-4 py-2 bg-black hover:bg-red-600 text-white font-bold text-xs uppercase tracking-wider transition-colors flex items-center gap-1.5"
               >
                 <Send className="w-3.5 h-3.5" /> Add Note
               </button>
             </form>
             <div className="space-y-2">
               {notesList.map((n, idx) => (
-                <div key={idx} className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs flex justify-between">
-                  <span className="text-slate-200">{n.note}</span>
+                <div key={idx} className="p-3 bg-slate-50 border border-slate-300 text-xs flex justify-between">
+                  <span className="text-black">{n.note}</span>
                   <span className="text-[10px] font-mono text-slate-500 ml-4">{n.time}</span>
                 </div>
               ))}
@@ -171,19 +171,19 @@ export const AlertDetail: React.FC = () => {
         </div>
 
         <div className="space-y-6">
-          <div className="bg-[#111827] p-6 rounded-xl border border-slate-800 space-y-4">
-            <h2 className="text-sm font-bold text-slate-100 border-b border-slate-800 pb-3">Triage Controls</h2>
+          <div className="bg-white border-2 border-black p-6 shadow-sm space-y-4">
+            <h2 className="text-sm font-black text-black uppercase border-b-2 border-black pb-3">Triage Controls</h2>
             <div className="space-y-3">
-              <label className="text-xs font-semibold text-slate-400 block">Status Transition:</label>
+              <label className="text-xs font-bold text-slate-500 uppercase block">Status Transition:</label>
               <div className="grid grid-cols-2 gap-2">
                 {['Open', 'In Progress', 'Resolved', 'Dismissed'].map((st) => (
                   <button
                     key={st}
                     onClick={() => updateMutation.mutate(st)}
-                    className={`px-3 py-2 rounded-lg text-xs font-bold border transition-colors ${
+                    className={`px-3 py-2 text-xs font-bold uppercase transition-colors ${
                       alert.status === st
-                        ? 'bg-blue-600/20 text-blue-400 border-blue-500'
-                        : 'bg-slate-900 text-slate-300 border-slate-800 hover:bg-slate-800'
+                        ? 'bg-black text-white'
+                        : 'bg-slate-100 text-black border border-slate-300 hover:bg-slate-200'
                     }`}
                   >
                     {st}
@@ -194,21 +194,16 @@ export const AlertDetail: React.FC = () => {
           </div>
 
           {user && (
-            <div className="bg-[#111827] p-6 rounded-xl border border-slate-800 space-y-3">
-              <h2 className="text-sm font-bold text-slate-100 border-b border-slate-800 pb-3">Entity Context</h2>
+            <div className="bg-white border-2 border-black p-6 shadow-sm space-y-3">
+              <h2 className="text-sm font-black text-black uppercase border-b-2 border-black pb-3">Entity Context</h2>
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-600/20 text-blue-400">
-                  <User className="w-5 h-5" />
+                <div className="p-2 border border-black bg-red-50 text-red-600">
+                  <User className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-100">{user.full_name}</div>
-                  <div className="text-[11px] text-slate-400">{user.email}</div>
-                  <div className="text-[10px] text-slate-500">{user.department} • {user.role}</div>
+                  <div className="font-bold text-black uppercase">{user.full_name}</div>
+                  <div className="text-[11px] text-slate-600">{user.email}</div>
                 </div>
-              </div>
-              <div className="mt-3 pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
-                <span className="text-slate-400">User Risk Score:</span>
-                <RiskBadge score={user.current_risk_score} size="sm" />
               </div>
             </div>
           )}

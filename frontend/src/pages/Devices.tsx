@@ -29,18 +29,18 @@ export const DevicesPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="border-b border-slate-800 pb-4">
-        <h1 className="text-xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-          <HardDrive className="w-5 h-5 text-blue-400" />
-          Enterprise Device & Endpoint Inventory
+    <div className="space-y-6 text-slate-900 font-sans">
+      <div className="border-b-2 border-black pb-4">
+        <h1 className="text-2xl font-black text-black tracking-tight flex items-center gap-2 uppercase">
+          <HardDrive className="w-5 h-5 text-red-600" />
+          ENTERPRISE DEVICE & ENDPOINT INVENTORY
         </h1>
-        <p className="text-xs text-slate-400 mt-1">Manage trusted device fingerprints, MAC addresses, and OS security policies</p>
+        <p className="font-mono text-xs text-slate-600 mt-1 uppercase">Manage trusted device fingerprints, MAC addresses, and OS security policies</p>
       </div>
 
-      <div className="bg-[#111827] border border-slate-800 rounded-xl overflow-hidden shadow-sm">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-[#1A2234] text-slate-400 font-semibold uppercase border-b border-slate-800">
+      <div className="bg-white border-2 border-black overflow-hidden shadow-sm">
+        <table className="w-full text-left text-xs font-mono">
+          <thead className="bg-slate-100 text-black font-bold uppercase border-b-2 border-black">
             <tr>
               <th className="px-4 py-3">Device Name</th>
               <th className="px-4 py-3">Operating System</th>
@@ -51,24 +51,24 @@ export const DevicesPage: React.FC = () => {
               <th className="px-4 py-3 text-right">Trust Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-medium text-slate-300">
+          <tbody className="divide-y divide-slate-200 font-medium">
             {devices.map((device: Device) => (
-              <tr key={device.id} className="hover:bg-slate-800/40 transition-colors">
-                <td className="px-4 py-3 font-bold text-slate-100">{device.device_name}</td>
-                <td className="px-4 py-3 text-slate-300">{device.os}</td>
-                <td className="px-4 py-3 text-slate-400">{device.browser}</td>
-                <td className="px-4 py-3 font-mono text-slate-400">{device.mac_address}</td>
-                <td className="px-4 py-3 font-bold text-emerald-400">{device.trust_score}%</td>
+              <tr key={device.id} className="hover:bg-slate-50 transition-colors">
+                <td className="px-4 py-3 font-bold text-black">{device.device_name}</td>
+                <td className="px-4 py-3 text-slate-700">{device.os}</td>
+                <td className="px-4 py-3 text-slate-600">{device.browser}</td>
+                <td className="px-4 py-3 font-mono text-slate-600">{device.mac_address}</td>
+                <td className="px-4 py-3 font-bold text-black">{device.trust_score}/100</td>
                 <td className="px-4 py-3">
-                  <StatusBadge status={device.is_trusted ? 'TRUSTED' : 'UNTRUSTED'} />
+                  <StatusBadge status={device.is_trusted ? 'SUCCESS' : 'FAILED'} />
                 </td>
                 <td className="px-4 py-3 text-right">
                   <button
                     onClick={() => trustMutation.mutate({ id: device.id, is_trusted: !device.is_trusted })}
-                    className={`px-3 py-1 rounded text-[11px] font-bold border transition-colors ${
+                    className={`px-3 py-1 font-bold text-[10px] uppercase border transition-colors ${
                       device.is_trusted
-                        ? 'bg-red-950/40 text-red-400 border-red-800/50 hover:bg-red-900/50'
-                        : 'bg-emerald-950/40 text-emerald-400 border-emerald-800/50 hover:bg-emerald-900/50'
+                        ? 'bg-red-50 text-red-600 border-red-300 hover:bg-red-600 hover:text-white'
+                        : 'bg-black text-white hover:bg-red-600'
                     }`}
                   >
                     {device.is_trusted ? 'Revoke Trust' : 'Mark Trusted'}

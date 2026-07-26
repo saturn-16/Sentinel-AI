@@ -31,16 +31,16 @@ export const ThreatExplorer: React.FC = () => {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="border-b border-slate-800 pb-4">
-        <h1 className="text-xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-          <Search className="w-5 h-5 text-blue-400" />
-          Threat Explorer & Deep Search
+    <div className="space-y-6 text-slate-900 font-sans">
+      <div className="border-b-2 border-black pb-4">
+        <h1 className="text-2xl font-black text-black tracking-tight flex items-center gap-2 uppercase">
+          <Search className="w-5 h-5 text-red-600" />
+          THREAT EXPLORER & DEEP SEARCH
         </h1>
-        <p className="text-xs text-slate-400 mt-1">Multi-vector security log analysis and behavioral correlation</p>
+        <p className="font-mono text-xs text-slate-600 mt-1 uppercase">Multi-vector security log analysis and behavioral correlation</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-[#111827] p-4 rounded-xl border border-slate-800">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white p-4 border-2 border-black font-mono text-xs">
         <div className="relative">
           <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
@@ -48,7 +48,7 @@ export const ThreatExplorer: React.FC = () => {
             placeholder="Search by User ID, IP, City..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#1A2234] border border-slate-800 rounded-lg pl-9 pr-4 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500"
+            className="w-full bg-slate-50 border border-slate-300 pl-9 pr-4 py-2 text-xs font-mono text-black placeholder-slate-500 focus:outline-none focus:border-black"
           />
         </div>
 
@@ -56,7 +56,7 @@ export const ThreatExplorer: React.FC = () => {
           <select
             value={countryFilter}
             onChange={(e) => setCountryFilter(e.target.value)}
-            className="w-full bg-[#1A2234] border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500"
+            className="w-full bg-slate-50 border border-slate-300 px-3 py-2 text-xs font-mono font-bold text-black uppercase focus:outline-none"
           >
             <option value="">All Countries</option>
             <option value="United States">United States</option>
@@ -71,7 +71,7 @@ export const ThreatExplorer: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full bg-[#1A2234] border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500"
+            className="w-full bg-slate-50 border border-slate-300 px-3 py-2 text-xs font-mono font-bold text-black uppercase focus:outline-none"
           >
             <option value="">All Authentication Statuses</option>
             <option value="SUCCESS">SUCCESS</option>
@@ -80,9 +80,9 @@ export const ThreatExplorer: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-[#111827] border border-slate-800 rounded-xl overflow-hidden shadow-sm">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-[#1A2234] text-slate-400 font-semibold uppercase border-b border-slate-800">
+      <div className="bg-white border-2 border-black overflow-hidden shadow-sm">
+        <table className="w-full text-left text-xs font-mono">
+          <thead className="bg-slate-100 text-black font-bold uppercase border-b-2 border-black">
             <tr>
               <th className="px-4 py-3">Timestamp</th>
               <th className="px-4 py-3">User ID</th>
@@ -94,10 +94,10 @@ export const ThreatExplorer: React.FC = () => {
               <th className="px-4 py-3 text-right">Details</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-medium text-slate-300">
+          <tbody className="divide-y divide-slate-200 font-medium">
             {logs.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-slate-500">
+                <td colSpan={8} className="px-4 py-8 text-center text-slate-500 uppercase">
                   No matching threat logs found in database.
                 </td>
               </tr>
@@ -106,15 +106,15 @@ export const ThreatExplorer: React.FC = () => {
                 <tr
                   key={log.id}
                   onClick={() => setSelectedLog(log)}
-                  className="hover:bg-slate-800/40 cursor-pointer transition-colors"
+                  className="hover:bg-slate-50 cursor-pointer transition-colors"
                 >
-                  <td className="px-4 py-3 font-mono text-slate-400">
+                  <td className="px-4 py-3 font-mono text-slate-600">
                     {new Date(log.timestamp).toLocaleString()}
                   </td>
-                  <td className="px-4 py-3 font-bold text-slate-200">{log.user_id.substring(0, 8)}...</td>
-                  <td className="px-4 py-3 font-mono">{log.ip_address}</td>
-                  <td className="px-4 py-3">{log.city}, {log.country}</td>
-                  <td className="px-4 py-3 text-slate-400">{log.auth_method}</td>
+                  <td className="px-4 py-3 font-bold text-black">{log.user_id.substring(0, 8)}...</td>
+                  <td className="px-4 py-3 font-mono text-slate-700">{log.ip_address}</td>
+                  <td className="px-4 py-3 text-slate-800">{log.city}, {log.country}</td>
+                  <td className="px-4 py-3 text-slate-600">{log.auth_method}</td>
                   <td className="px-4 py-3">
                     <StatusBadge status={log.status} />
                   </td>
@@ -122,7 +122,7 @@ export const ThreatExplorer: React.FC = () => {
                     <RiskBadge score={log.risk_score_value} size="sm" />
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <ExternalLink className="w-4 h-4 text-blue-400 inline-block" />
+                    <ExternalLink className="w-4 h-4 text-red-600 inline-block" />
                   </td>
                 </tr>
               ))
@@ -137,14 +137,14 @@ export const ThreatExplorer: React.FC = () => {
           onClose={() => setSelectedLog(null)}
           title={`Log Inspection - ${selectedLog.id}`}
         >
-          <div className="space-y-4 text-xs font-mono">
-            <div className="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
-              <div><span className="text-slate-500">USER ID:</span> {selectedLog.user_id}</div>
-              <div><span className="text-slate-500">DEVICE ID:</span> {selectedLog.device_id}</div>
-              <div><span className="text-slate-500">IP ADDRESS:</span> {selectedLog.ip_address}</div>
-              <div><span className="text-slate-500">LOCATION:</span> {selectedLog.city}, {selectedLog.country}</div>
-              <div><span className="text-slate-500">USER AGENT:</span> {selectedLog.user_agent}</div>
-              <div><span className="text-slate-500">IS FLAGGED:</span> {selectedLog.is_flagged ? 'TRUE' : 'FALSE'}</div>
+          <div className="space-y-4 text-xs font-mono text-slate-900">
+            <div className="p-4 bg-white border-2 border-black space-y-2">
+              <div><span className="text-slate-500 font-bold">USER ID:</span> {selectedLog.user_id}</div>
+              <div><span className="text-slate-500 font-bold">DEVICE ID:</span> {selectedLog.device_id}</div>
+              <div><span className="text-slate-500 font-bold">IP ADDRESS:</span> {selectedLog.ip_address}</div>
+              <div><span className="text-slate-500 font-bold">LOCATION:</span> {selectedLog.city}, {selectedLog.country}</div>
+              <div><span className="text-slate-500 font-bold">USER AGENT:</span> {selectedLog.user_agent}</div>
+              <div><span className="text-slate-500 font-bold">IS FLAGGED:</span> {selectedLog.is_flagged ? 'TRUE' : 'FALSE'}</div>
             </div>
           </div>
         </Drawer>

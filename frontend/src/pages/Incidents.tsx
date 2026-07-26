@@ -40,46 +40,46 @@ export const Incidents: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+    <div className="space-y-6 text-slate-900 font-sans">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-black pb-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-            <FileText className="w-5 h-5 text-blue-400" />
-            SOC Incident Management Cases
+          <h1 className="text-2xl font-black text-black tracking-tight flex items-center gap-2 uppercase">
+            <FileText className="w-5 h-5 text-red-600" />
+            SOC INCIDENT MANAGEMENT CASES
           </h1>
-          <p className="text-xs text-slate-400 mt-1">Lifecycle tracking and resolution workflows for enterprise threats</p>
+          <p className="font-mono text-xs text-slate-600 mt-1 uppercase">Lifecycle tracking and resolution workflows for enterprise threats</p>
         </div>
 
         <button
           onClick={() => setShowCreate(!showCreate)}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-black hover:bg-red-600 text-white font-mono text-xs font-bold uppercase tracking-wider transition-colors"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-amber-400" />
           <span>New Incident Case</span>
         </button>
       </div>
 
       {showCreate && (
-        <form onSubmit={handleSubmit} className="p-5 rounded-xl bg-[#111827] border border-blue-500/40 space-y-4">
-          <h2 className="text-sm font-bold text-slate-100">Create New Incident Case File</h2>
+        <form onSubmit={handleSubmit} className="p-5 bg-white border-2 border-black space-y-4 font-mono text-xs">
+          <h2 className="text-sm font-black text-black uppercase">Create New Incident Case File</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-semibold text-slate-400 block mb-1">Title</label>
+              <label className="font-bold text-slate-600 block mb-1 uppercase">Title</label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Credential Stuffing & Unauthorized Data Access"
-                className="w-full bg-[#1A2234] border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                className="w-full bg-slate-50 border border-slate-300 px-3 py-2 text-xs text-black focus:outline-none focus:border-black"
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-slate-400 block mb-1">Severity</label>
+              <label className="font-bold text-slate-600 block mb-1 uppercase">Severity</label>
               <select
                 value={severity}
                 onChange={(e) => setSeverity(e.target.value)}
-                className="w-full bg-[#1A2234] border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                className="w-full bg-slate-50 border border-slate-300 px-3 py-2 text-xs font-bold text-black uppercase focus:outline-none"
               >
                 <option value="Critical">Critical</option>
                 <option value="High">High</option>
@@ -89,27 +89,27 @@ export const Incidents: React.FC = () => {
             </div>
           </div>
           <div>
-            <label className="text-xs font-semibold text-slate-400 block mb-1">Description & Initial Findings</label>
+            <label className="font-bold text-slate-600 block mb-1 uppercase">Description & Initial Findings</label>
             <textarea
               required
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe anomalous behavior timeline, compromised entities, and remediation steps taken..."
-              className="w-full bg-[#1A2234] border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-300 px-3 py-2 text-xs text-black focus:outline-none focus:border-black"
             />
           </div>
           <div className="flex justify-end gap-2">
             <button
               type="button"
               onClick={() => setShowCreate(false)}
-              className="px-3 py-1.5 rounded-lg bg-slate-800 text-xs font-semibold text-slate-300 hover:bg-slate-700"
+              className="px-3 py-1.5 border border-black text-black font-bold uppercase hover:bg-slate-100"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded-lg bg-blue-600 text-xs font-bold text-white hover:bg-blue-500"
+              className="px-4 py-1.5 bg-black text-white hover:bg-red-600 font-bold uppercase"
             >
               Create Incident
             </button>
@@ -117,9 +117,9 @@ export const Incidents: React.FC = () => {
         </form>
       )}
 
-      <div className="bg-[#111827] border border-slate-800 rounded-xl overflow-hidden shadow-sm">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-[#1A2234] text-slate-400 font-semibold uppercase border-b border-slate-800">
+      <div className="bg-white border-2 border-black overflow-hidden shadow-sm">
+        <table className="w-full text-left text-xs font-mono">
+          <thead className="bg-slate-100 text-black font-bold uppercase border-b-2 border-black">
             <tr>
               <th className="px-4 py-3">Incident Title</th>
               <th className="px-4 py-3">Severity</th>
@@ -128,25 +128,25 @@ export const Incidents: React.FC = () => {
               <th className="px-4 py-3">Created Date</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-medium text-slate-300">
+          <tbody className="divide-y divide-slate-200 font-medium">
             {data.items.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-slate-500">
+                <td colSpan={5} className="px-4 py-8 text-center text-slate-500 uppercase">
                   No active incidents recorded.
                 </td>
               </tr>
             ) : (
               data.items.map((inc: Incident) => (
-                <tr key={inc.id} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="px-4 py-3 font-bold text-slate-100">{inc.title}</td>
+                <tr key={inc.id} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-4 py-3 font-bold text-black">{inc.title}</td>
                   <td className="px-4 py-3">
                     <RiskBadge level={inc.severity} size="sm" />
                   </td>
                   <td className="px-4 py-3">
                     <StatusBadge status={inc.status} />
                   </td>
-                  <td className="px-4 py-3 text-slate-400 font-mono">{inc.assigned_to || 'Unassigned'}</td>
-                  <td className="px-4 py-3 font-mono text-slate-400">{new Date(inc.created_at).toLocaleDateString()}</td>
+                  <td className="px-4 py-3 text-slate-600 font-mono">{inc.assigned_to || 'Unassigned'}</td>
+                  <td className="px-4 py-3 font-mono text-slate-600">{new Date(inc.created_at).toLocaleDateString()}</td>
                 </tr>
               ))
             )}

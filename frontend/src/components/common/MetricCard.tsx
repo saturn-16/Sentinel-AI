@@ -18,27 +18,27 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   change,
   changeType = 'neutral',
   icon: Icon,
-  iconColor = 'text-blue-400',
+  iconColor = 'text-red-600',
 }) => {
   return (
-    <div className="bg-[#111827] border border-slate-800 rounded-xl p-5 shadow-sm hover:border-slate-700 transition-all duration-200">
+    <div className="bg-white border-2 border-black p-5 shadow-sm hover:border-red-600 transition-colors">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{title}</span>
-        <div className={`p-2 rounded-lg bg-slate-800/80 ${iconColor}`}>
-          <Icon className="w-5 h-5" />
+        <span className="font-mono text-[10px] font-bold text-slate-500 uppercase tracking-widest">{title}</span>
+        <div className="p-2 bg-red-600/10 text-red-600 border border-red-500/20 rounded">
+          <Icon className="w-4 h-4" />
         </div>
       </div>
 
       <div className="mt-3 flex items-baseline justify-between">
-        <span className="text-2xl font-bold text-slate-100 tracking-tight">{value}</span>
+        <span className="text-3xl font-black text-black tracking-tight">{value}</span>
         {change && (
           <span
-            className={`text-xs font-medium ${
+            className={`font-mono text-[11px] font-bold ${
               changeType === 'positive'
-                ? 'text-emerald-400'
+                ? 'text-emerald-600'
                 : changeType === 'negative'
-                ? 'text-red-400'
-                : 'text-slate-400'
+                ? 'text-red-600'
+                : 'text-slate-500'
             }`}
           >
             {change}
@@ -46,7 +46,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
         )}
       </div>
 
-      {subtext && <p className="mt-1 text-xs text-slate-500">{subtext}</p>}
+      {subtext && <p className="mt-1 font-mono text-[11px] text-slate-500 uppercase">{subtext}</p>}
     </div>
   );
 };

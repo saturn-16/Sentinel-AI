@@ -40,70 +40,70 @@ export const UserDetail: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
+    <div className="space-y-6 text-slate-900 font-sans">
+      <div className="flex items-center gap-4 border-b-2 border-black pb-4">
         <button
           onClick={() => navigate(-1)}
-          className="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-slate-100 hover:bg-slate-700 transition-colors"
+          className="p-2 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
         </button>
         <div>
-          <h1 className="text-xl font-bold text-slate-100 tracking-tight">{user.full_name}</h1>
-          <p className="text-xs text-slate-400">{user.email} • {user.department}</p>
+          <h1 className="text-2xl font-black text-black tracking-tight uppercase">{user.full_name}</h1>
+          <p className="font-mono text-xs text-slate-600 uppercase">{user.email} • {user.department}</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-[#111827] p-5 rounded-xl border border-slate-800 space-y-1">
-          <span className="text-xs text-slate-400 font-semibold uppercase">Current Risk Score</span>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 font-mono">
+        <div className="bg-white border-2 border-black p-5 space-y-1">
+          <span className="text-[10px] text-slate-500 font-bold uppercase">Current Risk Score</span>
           <div><RiskBadge score={user.current_risk_score} size="lg" /></div>
         </div>
-        <div className="bg-[#111827] p-5 rounded-xl border border-slate-800 space-y-1">
-          <span className="text-xs text-slate-400 font-semibold uppercase">Privilege Level</span>
-          <div className="text-sm font-bold text-slate-100">{user.privilege_level}</div>
+        <div className="bg-white border-2 border-black p-5 space-y-1">
+          <span className="text-[10px] text-slate-500 font-bold uppercase">Privilege Level</span>
+          <div className="text-xl font-bold text-black uppercase">{user.privilege_level}</div>
         </div>
-        <div className="bg-[#111827] p-5 rounded-xl border border-slate-800 space-y-1">
-          <span className="text-xs text-slate-400 font-semibold uppercase">Work Pattern</span>
-          <div className="text-sm font-bold text-blue-400">{user.work_pattern}</div>
+        <div className="bg-white border-2 border-black p-5 space-y-1">
+          <span className="text-[10px] text-slate-500 font-bold uppercase">Work Pattern</span>
+          <div className="text-xl font-bold text-red-600 uppercase">{user.work_pattern}</div>
         </div>
-        <div className="bg-[#111827] p-5 rounded-xl border border-slate-800 space-y-1">
-          <span className="text-xs text-slate-400 font-semibold uppercase">Behavior Consistency</span>
-          <div className="text-lg font-bold text-emerald-400">{profile?.behavior_consistency_score || 94.5}%</div>
+        <div className="bg-white border-2 border-black p-5 space-y-1">
+          <span className="text-[10px] text-slate-500 font-bold uppercase">Behavior Consistency</span>
+          <div className="text-xl font-bold text-black">{profile?.behavior_consistency_score || 94.5}%</div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-[#111827] p-6 rounded-xl border border-slate-800 space-y-6">
-          <h2 className="text-base font-bold text-slate-100 border-b border-slate-800 pb-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 font-mono text-xs">
+        <div className="lg:col-span-2 bg-white border-2 border-black p-6 shadow-sm space-y-6">
+          <h2 className="text-base font-black text-black uppercase border-b-2 border-black pb-3">
             Learned Behavioral Baseline Profile
           </h2>
 
-          <div className="grid grid-cols-2 gap-4 text-xs">
-            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-              <span className="text-slate-400 font-bold uppercase flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-blue-400" /> Normal Login Hours
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 bg-slate-50 border border-slate-300 space-y-2">
+              <span className="text-slate-600 font-bold uppercase flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-red-600" /> Normal Login Hours
               </span>
-              <div className="text-slate-200 font-mono">
+              <div className="text-black font-bold">
                 {profile?.normal_login_hours?.hours?.join(':00, ')}:00
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-              <span className="text-slate-400 font-bold uppercase flex items-center gap-1.5">
-                <Globe className="w-4 h-4 text-emerald-400" /> Trusted Countries
+            <div className="p-4 bg-slate-50 border border-slate-300 space-y-2">
+              <span className="text-slate-600 font-bold uppercase flex items-center gap-1.5">
+                <Globe className="w-4 h-4 text-red-600" /> Trusted Countries
               </span>
-              <div className="text-slate-200 font-mono">
+              <div className="text-black font-bold">
                 {profile?.normal_countries?.countries?.join(', ')}
               </div>
             </div>
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase text-slate-400 tracking-wider">Recent Authentication Log Trail</h3>
-            <div className="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden">
+            <h3 className="text-xs font-bold uppercase text-slate-500 tracking-wider">Recent Authentication Log Trail</h3>
+            <div className="bg-white border-2 border-black overflow-hidden">
               <table className="w-full text-left text-xs">
-                <thead className="bg-[#1A2234] text-slate-400 font-semibold">
+                <thead className="bg-slate-100 text-black font-bold uppercase border-b-2 border-black">
                   <tr>
                     <th className="px-3 py-2">Timestamp</th>
                     <th className="px-3 py-2">IP Address</th>
@@ -111,12 +111,12 @@ export const UserDetail: React.FC = () => {
                     <th className="px-3 py-2">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody className="divide-y divide-slate-200">
                   {logs?.items?.map((log) => (
                     <tr key={log.id}>
-                      <td className="px-3 py-2 font-mono text-slate-400">{new Date(log.timestamp).toLocaleString()}</td>
-                      <td className="px-3 py-2 font-mono">{log.ip_address}</td>
-                      <td className="px-3 py-2">{log.city}, {log.country}</td>
+                      <td className="px-3 py-2 font-mono text-slate-600">{new Date(log.timestamp).toLocaleString()}</td>
+                      <td className="px-3 py-2 font-mono text-black">{log.ip_address}</td>
+                      <td className="px-3 py-2 text-slate-700">{log.city}, {log.country}</td>
                       <td className="px-3 py-2"><StatusBadge status={log.status} /></td>
                     </tr>
                   ))}
@@ -126,16 +126,16 @@ export const UserDetail: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-[#111827] p-6 rounded-xl border border-slate-800 space-y-4">
-          <h2 className="text-base font-bold text-slate-100 border-b border-slate-800 pb-3">Associated Devices</h2>
+        <div className="bg-white border-2 border-black p-6 shadow-sm space-y-4">
+          <h2 className="text-base font-black text-black uppercase border-b-2 border-black pb-3">Associated Devices</h2>
           <div className="space-y-3">
             {devices?.map((d) => (
-              <div key={d.id} className="p-3 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
+              <div key={d.id} className="p-3 bg-slate-50 border border-slate-300 flex items-center justify-between text-xs">
                 <div>
-                  <div className="font-bold text-slate-200">{d.device_name}</div>
+                  <div className="font-bold text-black uppercase">{d.device_name}</div>
                   <div className="text-[11px] text-slate-500 font-mono">{d.mac_address}</div>
                 </div>
-                <StatusBadge status={d.is_trusted ? 'TRUSTED' : 'UNTRUSTED'} />
+                <StatusBadge status={d.is_trusted ? 'SUCCESS' : 'FAILED'} />
               </div>
             ))}
           </div>

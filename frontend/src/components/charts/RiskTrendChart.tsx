@@ -12,17 +12,17 @@ export const RiskTrendChart: React.FC<RiskTrendChartProps> = ({ data }) => {
         <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="riskGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
-              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.0} />
+              <stop offset="5%" stopColor="#ef4444" stopOpacity={0.25} />
+              <stop offset="95%" stopColor="#ef4444" stopOpacity={0.0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1F2937" vertical={false} />
-          <XAxis dataKey="time" stroke="#6B7280" fontSize={11} tickLine={false} />
-          <YAxis stroke="#6B7280" fontSize={11} tickLine={false} domain={[0, 100]} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+          <XAxis dataKey="time" stroke="#6b7280" fontSize={11} tickLine={false} />
+          <YAxis stroke="#6b7280" fontSize={11} tickLine={false} domain={[0, 100]} />
           <Tooltip
-            contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px', color: '#F3F4F6' }}
+            contentStyle={{ backgroundColor: '#ffffff', borderColor: '#000000', borderWidth: '2px', borderRadius: '0px', color: '#000000', fontWeight: 'bold' }}
           />
-          <Area type="monotone" dataKey="avg_score" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#riskGrad)" name="Average Risk Score" />
+          <Area type="monotone" dataKey="avg_score" stroke="#ef4444" strokeWidth={2.5} fillOpacity={1} fill="url(#riskGrad)" name="Average Risk Score" />
         </AreaChart>
       </ResponsiveContainer>
     </div>

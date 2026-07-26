@@ -22,16 +22,16 @@ export const UsersPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="border-b border-slate-800 pb-4">
-        <h1 className="text-xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-          <UsersIcon className="w-5 h-5 text-blue-400" />
-          Enterprise User Directory & Risk Profiles
+    <div className="space-y-6 text-slate-900 font-sans">
+      <div className="border-b-2 border-black pb-4">
+        <h1 className="text-2xl font-black text-black tracking-tight flex items-center gap-2 uppercase">
+          <UsersIcon className="w-5 h-5 text-red-600" />
+          ENTERPRISE USER DIRECTORY & RISK PROFILES
         </h1>
-        <p className="text-xs text-slate-400 mt-1">Continuous behavioral risk baselines across monitored employees</p>
+        <p className="font-mono text-xs text-slate-600 mt-1 uppercase">Continuous behavioral risk baselines across monitored employees</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#111827] p-4 rounded-xl border border-slate-800">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white p-4 border-2 border-black font-mono text-xs">
         <div className="relative">
           <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
@@ -39,7 +39,7 @@ export const UsersPage: React.FC = () => {
             placeholder="Search by full name or email address..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-[#1A2234] border border-slate-800 rounded-lg pl-9 pr-4 py-2 text-xs text-slate-100 focus:outline-none"
+            className="w-full bg-slate-50 border border-slate-300 pl-9 pr-4 py-2 text-xs font-mono text-black placeholder-slate-500 focus:outline-none focus:border-black"
           />
         </div>
 
@@ -47,7 +47,7 @@ export const UsersPage: React.FC = () => {
           <select
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
-            className="w-full bg-[#1A2234] border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none"
+            className="w-full bg-slate-50 border border-slate-300 px-3 py-2 text-xs font-mono font-bold text-black uppercase focus:outline-none"
           >
             <option value="">All Departments</option>
             <option value="Security Operations">Security Operations</option>
@@ -58,9 +58,9 @@ export const UsersPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-[#111827] border border-slate-800 rounded-xl overflow-hidden shadow-sm">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-[#1A2234] text-slate-400 font-semibold uppercase border-b border-slate-800">
+      <div className="bg-white border-2 border-black overflow-hidden shadow-sm">
+        <table className="w-full text-left text-xs font-mono">
+          <thead className="bg-slate-100 text-black font-bold uppercase border-b-2 border-black">
             <tr>
               <th className="px-4 py-3">Employee Name</th>
               <th className="px-4 py-3">Email Address</th>
@@ -71,19 +71,19 @@ export const UsersPage: React.FC = () => {
               <th className="px-4 py-3 text-right">View Profile</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-medium text-slate-300">
+          <tbody className="divide-y divide-slate-200 font-medium">
             {data.items.map((u: User) => (
               <tr
                 key={u.id}
                 onClick={() => navigate(`/users/${u.id}`)}
-                className="hover:bg-slate-800/40 cursor-pointer transition-colors"
+                className="hover:bg-slate-50 cursor-pointer transition-colors"
               >
-                <td className="px-4 py-3 font-bold text-slate-100">{u.full_name}</td>
-                <td className="px-4 py-3 font-mono text-slate-400">{u.email}</td>
-                <td className="px-4 py-3">{u.department}</td>
-                <td className="px-4 py-3 text-slate-300">{u.role}</td>
+                <td className="px-4 py-3 font-bold text-black">{u.full_name}</td>
+                <td className="px-4 py-3 font-mono text-slate-600">{u.email}</td>
+                <td className="px-4 py-3 text-slate-700">{u.department}</td>
+                <td className="px-4 py-3 text-slate-700">{u.role}</td>
                 <td className="px-4 py-3">
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${u.privilege_level === 'Admin' ? 'bg-purple-950/50 text-purple-400 border-purple-800' : 'bg-slate-800 text-slate-300 border-slate-700'}`}>
+                  <span className={`px-2 py-0.5 text-[10px] font-bold uppercase border ${u.privilege_level === 'Admin' ? 'bg-red-50 text-red-600 border-red-300' : 'bg-slate-100 text-slate-700 border-slate-300'}`}>
                     {u.privilege_level}
                   </span>
                 </td>
@@ -91,7 +91,7 @@ export const UsersPage: React.FC = () => {
                   <RiskBadge score={u.current_risk_score} size="sm" />
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <ChevronRight className="w-4 h-4 text-slate-400 inline-block" />
+                  <ChevronRight className="w-4 h-4 text-slate-600 inline-block" />
                 </td>
               </tr>
             ))}

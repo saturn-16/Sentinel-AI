@@ -65,7 +65,7 @@ export const Reports: React.FC = () => {
           <title>Honeywell SentinelAI SOC Executive Report - ${reportName}</title>
           <style>
             body { font-family: sans-serif; padding: 40px; color: #111; }
-            h1 { color: #00539C; border-bottom: 2px solid #00539C; padding-bottom: 10px; }
+            h1 { color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; }
             .header { display: flex; justify-content: space-between; margin-bottom: 30px; }
             table { width: 100%; border-collapse: collapse; margin-top: 20px; }
             th, td { border: 1px solid #ccc; padding: 8px; text-align: left; font-size: 12px; }
@@ -105,44 +105,42 @@ export const Reports: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-        <div>
-          <h1 className="text-xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-            <FileText className="w-5 h-5 text-blue-400" />
-            SOC Executive Threat & Compliance Reports
-          </h1>
-          <p className="text-xs text-slate-400 mt-1">Export downloadable audit summaries for Honeywell CISOs and Security Governance</p>
-        </div>
+    <div className="space-y-6 text-slate-900 font-sans">
+      <div className="border-b-2 border-black pb-4">
+        <h1 className="text-2xl font-black text-black tracking-tight flex items-center gap-2 uppercase">
+          <FileText className="w-5 h-5 text-red-600" />
+          SOC EXECUTIVE THREAT & COMPLIANCE REPORTS
+        </h1>
+        <p className="font-mono text-xs text-slate-600 mt-1 uppercase">Export downloadable audit summaries for Honeywell CISOs and Security Governance</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono">
         {[
           { title: 'Alerts & Threat Detection Log', type: 'Alerts', desc: 'Detailed log of all automated behavioral anomaly alerts and MITRE mappings.' },
           { title: 'Incident Response Case Summary', type: 'Incidents', desc: 'Lifecycle audit of SOC incident cases, assignments, and resolution notes.' },
           { title: 'Workforce Risk & ML Performance', type: 'Analytics', desc: 'Precision, recall, F1-Score, and model baseline statistics.' },
         ].map((r, i) => (
-          <div key={i} className="bg-[#111827] border border-slate-800 rounded-xl p-5 space-y-4 hover:border-slate-700 transition-colors">
+          <div key={i} className="bg-white border-2 border-black p-5 space-y-4 shadow-sm hover:border-red-600 transition-colors">
             <div className="flex items-center justify-between">
-              <FileText className="w-6 h-6 text-blue-400" />
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Honeywell Audit</span>
+              <FileText className="w-6 h-6 text-red-600" />
+              <span className="text-[10px] font-bold px-2 py-0.5 border border-slate-300 bg-slate-50 text-slate-600 uppercase">Honeywell Audit</span>
             </div>
             <div>
-              <div className="font-bold text-sm text-slate-100">{r.title}</div>
-              <div className="text-xs text-slate-400 mt-1">{r.desc}</div>
+              <div className="font-bold text-sm text-black uppercase">{r.title}</div>
+              <div className="text-xs text-slate-600 mt-1 uppercase">{r.desc}</div>
             </div>
             <div className="grid grid-cols-2 gap-2 pt-2">
               <button
                 disabled={downloading === r.type}
                 onClick={() => handleExportCSV(r.type)}
-                className="py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-200 rounded-lg transition-colors flex items-center justify-center gap-1"
+                className="py-2 bg-slate-100 border border-slate-300 text-xs font-bold text-black uppercase hover:bg-slate-200 transition-colors flex items-center justify-center gap-1"
               >
                 <Download className="w-3.5 h-3.5" /> CSV
               </button>
               <button
                 disabled={downloading === `${r.type}-pdf`}
                 onClick={() => handleExportPDF(r.type)}
-                className="py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-xs font-bold text-blue-400 rounded-lg transition-colors flex items-center justify-center gap-1"
+                className="py-2 bg-black text-white text-xs font-bold uppercase hover:bg-red-600 transition-colors flex items-center justify-center gap-1"
               >
                 <Printer className="w-3.5 h-3.5" /> PDF
               </button>
