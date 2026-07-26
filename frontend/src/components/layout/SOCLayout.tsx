@@ -12,7 +12,7 @@ interface SOCLayoutProps {
 }
 
 const socMenuItems = [
-  { label: 'Landing Overview', link: '/landing' },
+  { label: 'Home', link: '/landing' },
   { label: 'Dashboard', link: '/' },
   { label: 'Executive Dashboard', link: '/executive' },
   { label: 'Live Monitoring', link: '/live' },
@@ -64,10 +64,10 @@ export const SOCLayout: React.FC<SOCLayoutProps> = ({ children }) => {
         socialItems={socSocialItems}
         displaySocials={true}
         displayItemNumbering={true}
-        menuButtonColor="#000000"
+        menuButtonColor="#ef4444"
         openMenuButtonColor="#ef4444"
         accentColor="#ef4444"
-        colors={['#121212', '#ef4444']}
+        colors={['#f1f5f9', '#ffffff']}
       />
 
       <div className="flex-1 flex flex-col w-full relative z-10">

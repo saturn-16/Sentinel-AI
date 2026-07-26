@@ -15,7 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenNotifications }) => {
 
   return (
     <header className="h-16 bg-[#FAFAFA]/90 backdrop-blur-md border-b border-black/10 px-6 flex items-center justify-between sticky top-0 z-30 font-sans">
-      <div className="flex items-center gap-4 pl-12">
+      <div className="flex items-center gap-4 pr-28">
         <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => window.location.href = '/landing'}>
           <div className="p-1.5 bg-red-600/10 text-red-600 rounded-md border border-red-500/20">
             <ShieldAlert className="w-4 h-4" />
