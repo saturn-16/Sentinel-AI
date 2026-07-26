@@ -2,134 +2,151 @@
 
 Developed for **Honeywell Hackathon 2026**.
 
-SentinelAI is an enterprise-grade, real-time Security Operations Center (SOC) platform powered by ensemble Machine Learning models (**Isolation Forest + One-Class SVM**). It learns normal employee baseline behavior from authentication and activity logs, detects anomalous access patterns in real time, classifies attack vectors, generates explainable 0-100 risk scores with plain-language rationales, and streams live security alerts via WebSockets.
+SentinelAI is an enterprise-grade, real-time Security Operations Center (SOC) platform powered by ensemble Machine Learning models (**Isolation Forest + One-Class SVM**). It learns normal employee baseline behavior from authentication and activity logs, detects anomalous access patterns in real time, classifies attack vectors, maps threats to the **MITRE ATT&CK Framework**, generates explainable 0-100 risk scores, and streams live security alerts via WebSockets.
 
 ---
 
 ## 🏛️ System Architecture
 
-```mermaid
-graph TD
-    A[Enterprise User & Auth Logs] -->|Async Log Stream| B[Feature Extraction Service]
-    B -->|12-Dimensional Vector| C[Ensemble ML Pipeline]
-    C -->|IsoForest + OCSVM| D[Risk Scoring Engine 0-100]
-    D --> E[Attack Classification & Heuristic Engine]
-    E --> F[Explainability Engine]
-    F -->|High/Critical Risk| G[Database Storage & WebSocket Broadcaster]
-    G -->|Real-Time WS Push| H[React Enterprise SOC Dashboard]
+```
+[ Enterprise User & Auth Logs ]
+              │
+              ▼
+  [ Feature Extraction Engine ]  (12-dimensional vector)
+              │
+              ▼
+   [ Ensemble ML Pipeline ]     (Isolation Forest + One-Class SVM)
+              │
+              ▼
+    [ Risk Scoring Engine ]     (Normalized 0-100 score)
+              │
+              ▼
+  [ MITRE ATT&CK & Explain ]    (Tactic/Technique mapping + plain language)
+              │
+              ▼
+   [ Real-Time Stream & WS ]    (Postgres DB persistence & WebSocket broadcast)
+              │
+              ▼
+   [ React 18 SOC Dashboard ]   (Enterprise dark UI with real-time stream)
 ```
 
 ---
 
-## 🚀 Tech Stack
+## 🛡️ MITRE ATT&CK Framework Mapping
 
-### Backend & Machine Learning
-- **Framework**: Python 3.11+, FastAPI, Pydantic v2
-- **ORM & Database**: SQLAlchemy 2.0 Async, SQLite (Local Fallback) / PostgreSQL + AsyncPG
-- **Security & Auth**: JWT (Access & Refresh Tokens), Passlib (Bcrypt), RBAC (Admin, SOC Analyst, Viewer)
-- **Machine Learning**: Scikit-Learn (Isolation Forest, One-Class SVM), NumPy, Pandas, Joblib
-- **Real-Time Streaming**: WebSockets, Asyncio Event Pipeline
-
-### Frontend
-- **Framework**: React 18, TypeScript, Vite
-- **Styling**: TailwindCSS (Enterprise Dark Palette: Slate, Blue, Emerald, Red for Critical Alerts)
-- **Data Visualization**: Recharts (Risk Trends, Attack Timelines, Heatmaps, Severity Pie)
-- **State & Router**: React Query v5, Zustand, React Router v6
-- **Icons**: Lucide React
-
-### Deployment & Testing
-- **Containerization**: Docker, Docker Compose
-- **Testing**: Pytest, Pytest-Asyncio, HTTPX
+| Detected Attack Vector | MITRE Tactic | Technique Name | Technique ID |
+| :--- | :--- | :--- | :--- |
+| **Brute Force** | `TA0006 - Credential Access` | Brute Force | `T1110` |
+| **Credential Stuffing** | `TA0006 - Credential Access` | Credential Stuffing | `T1110.004` |
+| **Impossible Travel** | `TA0001 - Initial Access` | Valid Accounts | `T1078` |
+| **Device Spoofing** | `TA0005 - Defense Evasion` | Masquerading | `T1036` |
+| **Privilege Escalation** | `TA0004 - Privilege Escalation` | Exploitation for Privilege Escalation | `T1068` |
+| **Lateral Movement** | `TA0008 - Lateral Movement` | Remote Services | `T1021` |
+| **Insider Threat** | `TA0010 - Exfiltration` | Exfiltration Over Alternative Protocol | `T1048` |
+| **Slow Data Exfiltration** | `TA0010 - Exfiltration` | Data Transfer Size Limits | `T1030` |
 
 ---
 
-## ⚡ Features & Capabilities
+## 📁 Repository Structure
 
-1. **Synthetic Enterprise Generator**:
-   - Generates realistic corporate hierarchies, multi-country locations (US, UK, Germany, India, Canada, France, Japan), work patterns (Standard Shift, 24/7 Shift, Remote, Hybrid), devices, MAC addresses, and normal log activity.
-2. **8 Realistic Attack Scenario Simulators**:
-   - `Brute Force`: Multi-failed password spikes from single IP.
-   - `Credential Stuffing`: Compromised credentials tried across unknown devices and suspicious proxy IPs.
-   - `Impossible Travel`: Rapid geographic velocity jump (e.g., US to Russia in 15 minutes).
-   - `Device Spoofing`: Unrecognized MAC/OS fingerprint masquerading with low device trust score.
-   - `Privilege Escalation`: Sudden administrative endpoint usage by standard user.
-   - `Lateral Movement`: Off-hours access to rare internal subnets.
-   - `Insider Threat`: Off-hours access to sensitive code repositories and financial databases.
-   - `Slow Data Exfiltration`: Prolonged sessions transferring high-volume data payloads.
-3. **Transparent 0-100 Risk Scoring Engine**:
-   - Combines ML anomaly probabilities, behavior hour deviations, device trust scores, failed login counts, geographic velocity, and account privilege levels.
-4. **Natural Language Explainability**:
-   - Converts raw ML output into plain-language SOC analyst explanations (e.g., *"First login from Germany exhibiting impossible geographic velocity (850 km/h)"*).
-5. **Real-Time WebSocket Stream**:
-   - Live monitoring dashboard updates instantly without page refresh.
+```
+honeywell/
+├── backend/
+│   ├── api/v1/          # FastApi REST endpoints & WebSockets
+│   ├── core/            # Config, Async DB Engine, Exceptions
+│   ├── database/        # Async session factory
+│   ├── generator/       # Synthetic log engine & attack simulators
+│   ├── ml/              # Isolation Forest & One-Class SVM pipeline
+│   ├── models/          # SQLAlchemy ORM entities
+│   ├── repositories/    # Async CRUD repository layer
+│   ├── schemas/         # Pydantic v2 DTOs
+│   ├── security/        # JWT auth, Bcrypt hashing, RBAC
+│   ├── services/        # Business logic & MITRE ATT&CK mapper
+│   ├── tests/           # Pytest test suite
+│   └── main.py          # Entry point
+├── frontend/
+│   ├── src/
+│   │   ├── components/  # Layout, Charts, Common UI elements
+│   │   ├── pages/       # Dashboard, Executive, LiveStream, Alerts, etc.
+│   │   ├── services/    # Axios API & WebSocket client
+│   │   ├── store/       # Zustand state management
+│   │   └── types/       # TypeScript DTO interfaces
+├── docs/                # Architecture, Schema, API & Demo Guides
+├── docker-compose.yml   # Multi-container orchestrator with healthchecks
+├── .env.example         # Environment template
+└── README.md
+```
 
 ---
 
-## 🛠️ Installation & Running Locally
+## ⚙️ Environment Variables
 
-### 1. Prerequisites
-- Python 3.11+
-- Node.js 18+ & npm
+| Variable | Description | Default |
+| :--- | :--- | :--- |
+| `DATABASE_URL` | Async Database Connection URL | `postgresql+asyncpg://sentinel_user:sentinel_password_2026@postgres:5432/sentinel_db` |
+| `REDIS_URL` | Redis Connection URL | `redis://redis:6379/0` |
+| `SECRET_KEY` | JWT Signing Key | `sentinel_ai_super_secret_enterprise_key_2026_honeywell` |
+| `POSTGRES_DB` | Postgres Database Name | `sentinel_db` |
+| `POSTGRES_USER` | Postgres Database Username | `sentinel_user` |
+| `POSTGRES_PASSWORD` | Postgres Database Password | `sentinel_password_2026` |
 
-### 2. Backend Setup
+---
+
+## 🚀 Quick Start & Running Locally
+
+### 1. Docker Deployment (Recommended)
+```bash
+cp .env.example .env
+docker compose up --build -d
+```
+Access the frontend at `http://localhost:3000` and API docs at `http://localhost:8000/docs`.
+
+### 2. Manual Startup
+
+**Backend**:
 ```bash
 cd backend
-python -m venv venv
-# On Windows:
-venv\Scripts\activate
-# On Linux/macOS:
-source venv/bin/activate
-
 pip install -r requirements.txt
 python main.py
 ```
-Backend will start on `http://localhost:8000`. OpenAPI documentation available at `http://localhost:8000/docs`.
 
-### 3. Frontend Setup
+**Frontend**:
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Frontend will start on `http://localhost:3000`.
 
-### 4. Demo Login Credentials
+### 3. Demo Credentials
 - **Email**: `admin@honeywell.com`
 - **Password**: `SentinelPass2026!`
 
 ---
 
-## 🐳 Docker Deployment (One-Command Startup)
+## 🧪 Testing
 
-To build and run the entire stack (FastAPI Backend, React Frontend, PostgreSQL, Redis) in Docker:
-
-```bash
-docker-compose up --build
-```
-
-Access the SOC Platform at `http://localhost:3000`.
-
----
-
-## 🧪 Running Automated Tests
-
+Run backend tests:
 ```bash
 pytest backend/tests/test_sentinel.py -v
 ```
 
 ---
 
-## ⏱️ 8-Minute Hackathon Demo Script
+## 📸 Screenshots (Interface Preview)
 
-1. **0:00 - 1:00**: **Problem & Vision**: Introduce Honeywell's need for real-time behavioral cybersecurity monitoring beyond traditional static signature rules.
-2. **1:00 - 2:30**: **Dashboard Overview**: Walk through the SOC Dashboard KPIs (Total Users, Active Sessions, Today's Alerts, Risk Score 0-100, Detection Latency: 14.5ms).
-3. **2:30 - 4:00**: **Live Attack Injection**: Click *"Inject Scenario: Impossible Travel"* or *"Brute Force"*. Watch the real-time WebSocket ticker stream the event live into the UI.
-4. **4:00 - 5:30**: **Alert Investigation & Explainability**: Open an alert detail drawer to show plain-language explainability reasons and recommended SOC remediation actions.
-5. **5:30 - 6:30**: **Behavior Profiles & Threat Explorer**: Demonstrate how SentinelAI learns baseline normal login hours and trusted devices per employee.
-6. **6:30 - 7:30**: **ML Analytics**: Show model precision (95.4%), recall (94.1%), F1-Score (0.947), and confusion matrix.
-7. **7:30 - 8:00**: **Conclusion & Enterprise Readiness**: Highlight clean architecture, FastAPI + React 18, Docker readiness, and scalability.
+* **Main Executive SOC Dashboard**: Interactive KPI metrics, 24h Risk Trends, Attack Timelines.
+* **Live Ingestion Stream**: Real-time WebSocket feed with instant pause/resume and investigation drawer.
+* **Alert Investigation Workspace**: MITRE ATT&CK card, explainability breakdown, remediation steps, and SOC analyst notes.
 
 ---
 
-## 📄 License
+## 🗺️ Future Roadmap
+
+- [ ] Support for deep learning LSTM sequence anomaly models.
+- [ ] Automated Slack & Microsoft Teams Webhook alert notifications.
+- [ ] SOAR playbook integration for automated session termination.
+
+---
+
+## 📄 License & Governance
 Honeywell Hackathon Project 2026. Production MVP Edition.

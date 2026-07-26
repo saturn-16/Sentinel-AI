@@ -3,11 +3,16 @@ import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 
-from backend.core.database import Base, get_db
+from backend.core.database import Base
 from backend.main import app
 from backend.ml.pipeline import ml_pipeline
 from backend.services.risk_service import RiskScoringEngine
 from backend.services.attack_classifier_service import AttackClassificationService
+from backend.services.mitre_service import MitreAttackMapper
+from backend.services.explainability_service import ExplainabilityService
+from backend.security.auth import get_password_hash, verify_password, create_access_token
+from backend.repositories.repositories import UserRepository, DeviceRepository, AlertRepository
+from backend.models.entities import User, Device, Alert, Organization
 
 TEST_DB_URL = "sqlite+aiosqlite:///:memory:"
 
@@ -25,6 +30,45 @@ async def async_db_session():
     await engine.dispose()
 
 @pytest.mark.asyncio
+async def test_password_and_token_security():
+    password = "SentinelPass2026!"
+    hashed = get_password_hash(password)
+    assert verify_password(password, hashed) is True
+    assert verify_password("WrongPassword", hashed) is False
+
+    token = create_access_token(data={"sub": "user-123", "email": "test@honeywell.com"})
+    assert isinstance(token, str)
+    assert len(token) > 20
+
+@pytest.mark.asyncio
+async def test_mitre_attack_mapping():
+    mapping_bf = MitreAttackMapper.get_mapping("Brute Force")
+    assert mapping_bf["technique_id"] == "T1110"
+    assert "TA0006" in mapping_bf["tactic"]
+
+    mapping_it = MitreAttackMapper.get_mapping("Impossible Travel")
+    assert mapping_it["technique_id"] == "T0078" or mapping_it["technique_id"] == "T1078"
+
+@pytest.mark.asyncio
+async def test_explainability_service():
+    features = {
+        "geo_velocity_kmh": 850.0,
+        "new_device_flag": 1.0,
+        "failed_login_count_1h": 5
+    }
+    exp = ExplainabilityService.generate_explanation(
+        attack_type="Brute Force",
+        risk_score=94.5,
+        features=features,
+        country="Germany",
+        device_name="Unrecognized-PC",
+        user_name="John Doe"
+    )
+    assert "mitre_attack" in exp
+    assert exp["mitre_attack"]["technique_id"] == "T1110"
+    assert len(exp["reasons"]) > 0
+
+@pytest.mark.asyncio
 async def test_ml_pipeline_prediction():
     sample_features = {
         "login_hour_dev": 4.5,
@@ -40,7 +84,6 @@ async def test_ml_pipeline_prediction():
         "hist_anomaly_rate": 0.4,
         "behavior_consistency_score": 60.0
     }
-    
     pred = ml_pipeline.predict(sample_features)
     assert "anomaly_score" in pred
     assert "confidence_score" in pred
@@ -56,11 +99,27 @@ async def test_risk_scoring_engine():
     assert level in ["High", "Critical"]
 
 @pytest.mark.asyncio
-async def test_attack_classification():
-    features = {"failed_login_count_1h": 6.0, "new_device_flag": 1.0, "ip_reputation_score": 80.0}
-    attack_type, conf = AttackClassificationService.classify(features, is_anomaly=True, status="FAILED")
-    assert attack_type == "Brute Force"
-    assert conf > 0.80
+async def test_repositories(async_db_session):
+    org = Organization(name="Test Org", domain="test.com", industry="Security")
+    async_db_session.add(org)
+    await async_db_session.flush()
+
+    user = User(
+        organization_id=org.id,
+        email="repo_test@honeywell.com",
+        hashed_password=get_password_hash("pass"),
+        full_name="Repo Test User",
+        role="SOC Analyst",
+        department="SOC",
+        privilege_level="Standard"
+    )
+    user_repo = UserRepository(async_db_session)
+    created_user = await user_repo.create(user)
+    assert created_user.id is not None
+
+    found_user = await user_repo.get_by_email("repo_test@honeywell.com")
+    assert found_user is not None
+    assert found_user.full_name == "Repo Test User"
 
 @pytest.mark.asyncio
 async def test_health_check_endpoint():

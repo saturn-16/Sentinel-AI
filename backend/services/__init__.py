@@ -2,6 +2,7 @@ from backend.services.feature_service import FeatureExtractionService
 from backend.services.attack_classifier_service import AttackClassificationService
 from backend.services.explainability_service import ExplainabilityService
 from backend.services.risk_service import RiskScoringEngine
+from backend.services.mitre_service import MitreAttackMapper
 from backend.services.websocket_manager import ws_manager, WebSocketManager
 from backend.services.generator_service import SyntheticDataGenerator
 from backend.services.attack_simulator_service import AttackSimulatorService

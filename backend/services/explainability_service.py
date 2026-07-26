@@ -1,4 +1,5 @@
 from typing import Dict, Any, List
+from backend.services.mitre_service import MitreAttackMapper
 
 class ExplainabilityService:
     @staticmethod
@@ -42,11 +43,14 @@ class ExplainabilityService:
             reasons.append("Statistical deviation detected across multi-factor baseline behavior indicators.")
             actions.append("Monitor account for 24 hours and verify session token integrity.")
 
+        mitre_info = MitreAttackMapper.get_mapping(attack_type)
+
         return {
             "risk_score": round(risk_score, 1),
             "attack_type": attack_type,
             "user_name": user_name,
             "reasons": reasons,
             "suggested_actions": actions,
+            "mitre_attack": mitre_info,
             "summary_text": f"High risk event ({attack_type}) generated for {user_name} with risk score {round(risk_score, 1)}."
         }

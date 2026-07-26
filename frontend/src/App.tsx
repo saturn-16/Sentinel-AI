@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from './store/useAuthStore';
 import { SOCLayout } from './components/layout/SOCLayout';
 import { Dashboard } from './pages/Dashboard';
+import { ExecutiveDashboard } from './pages/ExecutiveDashboard';
 import { LiveMonitoring } from './pages/LiveMonitoring';
 import { ThreatExplorer } from './pages/ThreatExplorer';
 import { Alerts } from './pages/Alerts';
@@ -53,6 +54,7 @@ export const App: React.FC = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/executive" element={<ProtectedRoute><ExecutiveDashboard /></ProtectedRoute>} />
           <Route path="/live" element={<ProtectedRoute><LiveMonitoring /></ProtectedRoute>} />
           <Route path="/explorer" element={<ProtectedRoute><ThreatExplorer /></ProtectedRoute>} />
           <Route path="/alerts" element={<ProtectedRoute><Alerts /></ProtectedRoute>} />

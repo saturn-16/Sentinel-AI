@@ -97,6 +97,12 @@ export interface Alert {
     reasons: string[];
     suggested_actions: string[];
     summary_text: string;
+    mitre_attack?: {
+      tactic: string;
+      technique: string;
+      technique_id: string;
+      description: string;
+    };
   };
   created_at: string;
   updated_at: string;
