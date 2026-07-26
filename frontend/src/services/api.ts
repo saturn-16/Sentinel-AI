@@ -4,7 +4,9 @@ import {
   Alert, Incident, AnalyticsOverview, PaginatedResponse
 } from '../types';
 
-const API_BASE_URL = '/api/v1';
+const rawApiUrl = import.meta.env.VITE_API_URL || '';
+const cleanApiUrl = rawApiUrl.endsWith('/') ? rawApiUrl.slice(0, -1) : rawApiUrl;
+const API_BASE_URL = cleanApiUrl ? `${cleanApiUrl}/api/v1` : '/api/v1';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

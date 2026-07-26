@@ -12,11 +12,20 @@ class SOCWebSocketClient {
       return;
     }
 
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const hostname = window.location.hostname || 'localhost';
-    const port = window.location.port === '3000' ? '8000' : window.location.port;
-    const portStr = port ? `:${port}` : '';
-    const wsUrl = `${protocol}//${hostname}${portStr}/api/v1/ws`;
+    let wsUrl = '';
+    const rawUrl = import.meta.env.VITE_API_URL || '';
+    if (rawUrl) {
+      const cleanUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
+      const wsProtocol = cleanUrl.startsWith('https') ? 'wss:' : 'ws:';
+      const hostPath = cleanUrl.replace(/^https?:\/\//, '');
+      wsUrl = `${wsProtocol}//${hostPath}/api/v1/ws`;
+    } else {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const hostname = window.location.hostname || 'localhost';
+      const port = window.location.port === '3000' ? '8000' : window.location.port;
+      const portStr = port ? `:${port}` : '';
+      wsUrl = `${protocol}//${hostname}${portStr}/api/v1/ws`;
+    }
 
     this.socket = new WebSocket(wsUrl);
 
