@@ -3,6 +3,7 @@ import { Navbar } from './Navbar';
 import { CommandPalette } from './CommandPalette';
 import { NotificationCenter } from './NotificationCenter';
 import { StaggeredMenu } from '../common/StaggeredMenu';
+import { AttackToastContainer } from '../common/AttackToast';
 import Plasma from '../common/Plasma';
 import { wsClient } from '../../services/websocket';
 import { useSOCStore } from '../../store/useSOCStore';
@@ -77,6 +78,7 @@ export const SOCLayout: React.FC<SOCLayoutProps> = ({ children }) => {
 
       <CommandPalette />
       <NotificationCenter isOpen={isNotifOpen} onClose={() => setIsNotifOpen(false)} />
+      <AttackToastContainer />
     </div>
   );
 };

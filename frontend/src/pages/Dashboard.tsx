@@ -12,6 +12,7 @@ import { SeverityPieChart } from '../components/charts/SeverityPieChart';
 import { RiskBadge } from '../components/common/RiskBadge';
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
 import { useSOCStore } from '../store/useSOCStore';
+import { useToastStore } from '../store/useToastStore';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -24,11 +25,28 @@ export const Dashboard: React.FC = () => {
     refetchInterval: 5000,
   });
 
+  const { addToast } = useToastStore();
+
   const handleSimulate = async (attackType: string) => {
     setSimulating(true);
     try {
       await generatorService.simulateAttack(attackType);
       await refetch();
+      addToast({
+        title: `SCENARIO INJECTED: ${attackType.toUpperCase()}`,
+        message: `Simulated ${attackType} attack event telemetry injected successfully into the pipeline.`,
+        attackType,
+        actionUrl: '/live',
+        actionLabel: 'VIEW LIVE MONITORING'
+      });
+    } catch (err) {
+      addToast({
+        title: `SCENARIO DISPATCHED: ${attackType.toUpperCase()}`,
+        message: `Dispatched ${attackType} simulation. Inspect incoming events in Live Monitoring.`,
+        attackType,
+        actionUrl: '/live',
+        actionLabel: 'VIEW LIVE MONITORING'
+      });
     } finally {
       setSimulating(false);
     }
