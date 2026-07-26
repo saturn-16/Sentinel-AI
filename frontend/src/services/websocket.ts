@@ -13,7 +13,7 @@ class SOCWebSocketClient {
     }
 
     let wsUrl = '';
-    const rawUrl = import.meta.env.VITE_API_URL || '';
+    const rawUrl = (import.meta as any).env?.VITE_API_URL || '';
     if (rawUrl) {
       const cleanUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
       const wsProtocol = cleanUrl.startsWith('https') ? 'wss:' : 'ws:';

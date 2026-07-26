@@ -4,7 +4,7 @@ import {
   Alert, Incident, AnalyticsOverview, PaginatedResponse
 } from '../types';
 
-const rawApiUrl = import.meta.env.VITE_API_URL || '';
+const rawApiUrl = (import.meta as any).env?.VITE_API_URL || '';
 const cleanApiUrl = rawApiUrl.endsWith('/') ? rawApiUrl.slice(0, -1) : rawApiUrl;
 const API_BASE_URL = cleanApiUrl ? `${cleanApiUrl}/api/v1` : '/api/v1';
 
