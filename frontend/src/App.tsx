@@ -53,9 +53,10 @@ export const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/landing" element={<ProtectedRoute><LandingPage /></ProtectedRoute>} />
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/" element={<ProtectedRoute><LandingPage /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/executive" element={<ProtectedRoute><ExecutiveDashboard /></ProtectedRoute>} />
           <Route path="/live" element={<ProtectedRoute><LiveMonitoring /></ProtectedRoute>} />
           <Route path="/explorer" element={<ProtectedRoute><ThreatExplorer /></ProtectedRoute>} />

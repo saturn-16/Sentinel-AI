@@ -12,8 +12,8 @@ interface SOCLayoutProps {
 }
 
 const socMenuItems = [
-  { label: 'Home', link: '/landing' },
-  { label: 'Dashboard', link: '/' },
+  { label: 'Home', link: '/' },
+  { label: 'SOC Dashboard', link: '/dashboard' },
   { label: 'Executive Dashboard', link: '/executive' },
   { label: 'Live Monitoring', link: '/live' },
   { label: 'Threat Explorer', link: '/explorer' },

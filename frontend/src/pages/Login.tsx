@@ -17,7 +17,7 @@ export const Login: React.FC = () => {
     setLoading(true);
     try {
       await login(email, password);
-      navigate('/');
+      navigate('/landing');
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Invalid login credentials.');
     } finally {
