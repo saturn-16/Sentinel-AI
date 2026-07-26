@@ -10,30 +10,18 @@ from backend.models.entities import (
     BehaviorProfile, RiskScore, Alert, Incident, Prediction
 )
 from backend.security.auth import get_password_hash
+from backend.data.attack_profiles import DEPARTMENTS_LIST, OFFICE_LOCATIONS, VPN_GATEWAYS, SERVICE_ACCOUNTS, NORMAL_USER_AGENTS
 
-DEPARTMENTS = ["Security Operations", "Software Engineering", "Cloud Infrastructure", "Finance & HR", "Executive Leadership", "Supply Chain"]
-ROLES = ["SOC Analyst", "Software Engineer", "DevOps Specialist", "Financial Analyst", "System Admin", "Viewer"]
+ROLES = ["SOC Analyst", "Software Engineer", "DevOps Specialist", "Financial Analyst", "System Admin", "HR Specialist", "Sales Lead", "Legal Counsel"]
 PRIVILEGES = ["Standard", "Standard", "Standard", "Elevated", "Admin", "Executive"]
 WORK_PATTERNS = ["Standard Business Hours", "Shift Worker (24/7)", "Remote Employee", "Hybrid Worker"]
-COUNTRIES = ["United States", "United Kingdom", "Germany", "India", "Canada", "France", "Japan"]
-CITIES = {
-    "United States": ["New York", "San Francisco", "Austin", "Seattle", "Chicago"],
-    "United Kingdom": ["London", "Manchester", "Edinburgh"],
-    "Germany": ["Berlin", "Munich", "Frankfurt"],
-    "India": ["Bengaluru", "Hyderabad", "Mumbai", "Pune"],
-    "Canada": ["Toronto", "Vancouver"],
-    "France": ["Paris", "Lyon"],
-    "Japan": ["Tokyo", "Osaka"]
-}
-OS_LIST = ["Windows 11 Enterprise", "macOS Sonoma", "Ubuntu 22.04 LTS", "iOS 17", "Android 14"]
-BROWSERS = ["Chrome 122.0", "Edge 121.0", "Safari 17.2", "Firefox 123.0"]
 RESOURCES = ["/api/v1/auth/login", "/api/v1/finance/reports", "/api/v1/k8s/cluster", "/api/v1/database/export", "/api/v1/admin/users", "/api/v1/source/repo"]
 
 class SyntheticDataGenerator:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def generate_enterprise_environment(self, num_users: int = 40, num_days: int = 5) -> Dict[str, Any]:
+    async def generate_enterprise_environment(self, num_users: int = 50, num_days: int = 5) -> Dict[str, Any]:
         stmt = select(Organization).where(Organization.domain == "honeywell.com")
         res = await self.session.execute(stmt)
         org = res.scalar_one_or_none()
@@ -75,6 +63,7 @@ class SyntheticDataGenerator:
             r_u = await self.session.execute(stmt_u)
             existing = r_u.scalar_one_or_none()
             
+            dept = DEPARTMENTS_LIST[i % len(DEPARTMENTS_LIST)]
             if not existing:
                 u = User(
                     organization_id=org.id,
@@ -82,7 +71,7 @@ class SyntheticDataGenerator:
                     hashed_password=get_password_hash("Honeywell2026!"),
                     full_name=f"Enterprise Employee {i}",
                     role=random.choice(ROLES),
-                    department=random.choice(DEPARTMENTS),
+                    department=dept,
                     privilege_level=random.choice(PRIVILEGES),
                     work_pattern=random.choice(WORK_PATTERNS),
                     is_active=True,
@@ -96,16 +85,18 @@ class SyntheticDataGenerator:
         await self.session.flush()
 
         devices: List[Device] = []
-        for u in created_users:
+        for idx, u in enumerate(created_users):
             stmt_d = select(Device).where(Device.user_id == u.id)
             d_list = (await self.session.execute(stmt_d)).scalars().all()
             if not d_list:
+                dept_code = u.department[:3].upper()
+                dev_name = f"{dept_code}-LAP-{100 + idx}"
                 d = Device(
                     user_id=u.id,
-                    device_name=f"{u.full_name.replace(' ', '-')}-Workstation",
-                    device_type="Laptop",
-                    os=random.choice(OS_LIST),
-                    browser=random.choice(BROWSERS),
+                    device_name=dev_name,
+                    device_type="Workstation",
+                    os="Windows 11 Enterprise",
+                    browser="Chrome 122.0",
                     mac_address=f"00:1A:2B:{random.randint(10,99)}:{random.randint(10,99)}:{random.randint(10,99)}",
                     is_trusted=True,
                     trust_score=round(random.uniform(90.0, 99.0), 1)
@@ -124,7 +115,7 @@ class SyntheticDataGenerator:
                 p = BehaviorProfile(
                     user_id=u.id,
                     normal_login_hours={"hours": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17]},
-                    normal_countries={"countries": ["United States", "India", "Germany"]},
+                    normal_countries={"countries": ["United States", "United Kingdom", "Germany", "India"]},
                     normal_devices={"device_ids": [d.id for d in devices if d.user_id == u.id]},
                     normal_ip_ranges={"ips": ["192.168.1.0/24", "10.0.0.0/16"]},
                     auth_frequency_avg=4.5,
@@ -156,8 +147,8 @@ class SyntheticDataGenerator:
                 login_hour = random.randint(8, 10) if u.work_pattern != "Shift Worker (24/7)" else random.randint(0, 23)
                 login_timestamp = day_time.replace(hour=login_hour, minute=random.randint(0, 59))
                 
-                c = random.choice(["United States", "India", "Germany"])
-                ci = random.choice(CITIES[c])
+                c = random.choice(["United States", "United Kingdom", "Germany", "India"])
+                ci = "New York" if c == "United States" else ("London" if c == "United Kingdom" else ("Frankfurt" if c == "Germany" else "Bengaluru"))
                 
                 auth_log = AuthenticationLog(
                     user_id=u.id,
@@ -168,25 +159,12 @@ class SyntheticDataGenerator:
                     ip_address=f"192.168.{random.randint(1,10)}.{random.randint(2,254)}",
                     country=c,
                     city=ci,
-                    user_agent=f"Mozilla/5.0 ({dev.os}) {dev.browser}",
+                    user_agent=random.choice(NORMAL_USER_AGENTS),
                     is_flagged=False,
-                    risk_score_value=round(random.uniform(5.0, 18.0), 1)
+                    risk_score_value=0.0
                 )
                 self.session.add(auth_log)
                 auth_logs_count += 1
-                
-                act_log = ActivityLog(
-                    user_id=u.id,
-                    device_id=dev.id,
-                    timestamp=login_timestamp + timedelta(minutes=5),
-                    resource_accessed=random.choice(RESOURCES),
-                    action_type="READ",
-                    command_executed="kubectl get pods",
-                    session_id=str(uuid.uuid4()),
-                    duration_seconds=random.randint(300, 28800),
-                    bytes_transferred=random.randint(2048, 500000)
-                )
-                self.session.add(act_log)
 
         await self.session.commit()
 

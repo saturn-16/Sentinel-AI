@@ -1,0 +1,43 @@
+{
+  "training_timestamp": "2026-07-26T11:37:04.308770+00:00",
+  "dataset_size": 500,
+  "feature_count": 24,
+  "feature_names": [
+    "login_hour_dev",
+    "new_device_flag",
+    "geo_velocity_kmh",
+    "auth_freq_delta",
+    "device_trust_score",
+    "session_dev_hours",
+    "resource_rarity_score",
+    "failed_login_count_1h",
+    "ip_reputation_score",
+    "privilege_dev_flag",
+    "hist_anomaly_rate",
+    "behavior_consistency_score",
+    "weekday_dev",
+    "holiday_login_flag",
+    "office_closed_flag",
+    "vpn_gateway_dev",
+    "asn_reputation_score",
+    "tor_usage_flag",
+    "proxy_detection_flag",
+    "browser_fp_dev",
+    "device_mismatch_flag",
+    "mfa_bypass_indicator",
+    "simultaneous_logins_count",
+    "service_account_dev_flag"
+  ],
+  "training_duration_sec": 0.18,
+  "model_version": "2.0.0-enterprise",
+  "parameters": {
+    "isolation_forest": {
+      "n_estimators": 100,
+      "contamination": 0.05
+    },
+    "one_class_svm": {
+      "kernel": "rbf",
+      "nu": 0.05
+    }
+  }
+}

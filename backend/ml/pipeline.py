@@ -1,24 +1,23 @@
 import os
+import json
+import time
 import joblib
 import numpy as np
 import pandas as pd
+from datetime import datetime, timezone
 from typing import Dict, Any, Tuple
 from sklearn.ensemble import IsolationForest
 from sklearn.svm import OneClassSVM
 
 FEATURE_NAMES = [
-    "login_hour_dev",
-    "new_device_flag",
-    "geo_velocity_kmh",
-    "auth_freq_delta",
-    "device_trust_score",
-    "session_dev_hours",
-    "resource_rarity_score",
-    "failed_login_count_1h",
-    "ip_reputation_score",
-    "privilege_dev_flag",
-    "hist_anomaly_rate",
-    "behavior_consistency_score"
+    "login_hour_dev", "new_device_flag", "geo_velocity_kmh", "auth_freq_delta",
+    "device_trust_score", "session_dev_hours", "resource_rarity_score",
+    "failed_login_count_1h", "ip_reputation_score", "privilege_dev_flag",
+    "hist_anomaly_rate", "behavior_consistency_score", "weekday_dev",
+    "holiday_login_flag", "office_closed_flag", "vpn_gateway_dev",
+    "asn_reputation_score", "tor_usage_flag", "proxy_detection_flag",
+    "browser_fp_dev", "device_mismatch_flag", "mfa_bypass_indicator",
+    "simultaneous_logins_count", "service_account_dev_flag"
 ]
 
 class SentinelMLPipeline:
@@ -27,6 +26,7 @@ class SentinelMLPipeline:
         os.makedirs(self.model_dir, exist_ok=True)
         self.if_model_path = os.path.join(self.model_dir, "isolation_forest.joblib")
         self.svm_model_path = os.path.join(self.model_dir, "one_class_svm.joblib")
+        self.meta_path = os.path.join(self.model_dir, "metadata.json")
         
         self.iso_forest: IsolationForest = None
         self.one_class_svm: OneClassSVM = None
@@ -36,29 +36,61 @@ class SentinelMLPipeline:
     def load_or_init_models(self):
         if os.path.exists(self.if_model_path) and os.path.exists(self.svm_model_path):
             try:
-                self.iso_forest = joblib.load(self.if_model_path)
-                self.one_class_svm = joblib.load(self.svm_model_path)
-                return
+                if_loaded = joblib.load(self.if_model_path)
+                svm_loaded = joblib.load(self.svm_model_path)
+                if hasattr(if_loaded, "n_features_in_") and if_loaded.n_features_in_ == len(FEATURE_NAMES):
+                    self.iso_forest = if_loaded
+                    self.one_class_svm = svm_loaded
+                    return
             except Exception:
                 pass
         
         self._fit_default_baseline()
 
     def _fit_default_baseline(self):
-        np.random.seed(42)
-        normal_samples = np.random.normal(loc=[0.5, 0.0, 10.0, 1.0, 95.0, 0.2, 0.1, 0.0, 5.0, 0.0, 0.02, 95.0],
-                                          scale=[0.5, 0.05, 15.0, 0.5, 3.0, 0.2, 0.1, 0.2, 2.0, 0.05, 0.01, 3.0],
-                                          size=(300, 12))
-        normal_samples = np.clip(normal_samples, a_min=0, a_max=None)
+        t0 = time.time()
+        n_samples = 500
+        n_features = len(FEATURE_NAMES)
         
+        baseline_samples = np.zeros((n_samples, n_features))
+        for i in range(n_samples):
+            baseline_samples[i, 0] = float(np.random.choice([0.0, 0.0, 1.0]))
+            baseline_samples[i, 1] = 0.0
+            baseline_samples[i, 2] = float(np.random.uniform(0.0, 25.0))
+            baseline_samples[i, 3] = float(np.random.uniform(0.0, 1.0))
+            baseline_samples[i, 4] = float(np.random.uniform(90.0, 100.0))
+            baseline_samples[i, 5] = float(np.random.uniform(0.0, 0.5))
+            baseline_samples[i, 6] = 0.05
+            baseline_samples[i, 7] = 0.0
+            baseline_samples[i, 8] = 0.0
+            baseline_samples[i, 9] = float(np.random.choice([0.0, 1.0], p=[0.8, 0.2]))
+            baseline_samples[i, 10] = 0.01
+            baseline_samples[i, 11] = float(np.random.uniform(85.0, 100.0))
+
         self.iso_forest = IsolationForest(n_estimators=100, contamination=0.05, random_state=42)
-        self.iso_forest.fit(normal_samples)
+        self.iso_forest.fit(baseline_samples)
         
         self.one_class_svm = OneClassSVM(kernel='rbf', gamma='scale', nu=0.05)
-        self.one_class_svm.fit(normal_samples)
+        self.one_class_svm.fit(baseline_samples)
         
         joblib.dump(self.iso_forest, self.if_model_path)
         joblib.dump(self.one_class_svm, self.svm_model_path)
+
+        duration = time.time() - t0
+        meta = {
+            "training_timestamp": datetime.now(timezone.utc).isoformat(),
+            "dataset_size": n_samples,
+            "feature_count": n_features,
+            "feature_names": FEATURE_NAMES,
+            "training_duration_sec": round(duration, 3),
+            "model_version": "2.0.0-enterprise",
+            "parameters": {
+                "isolation_forest": {"n_estimators": 100, "contamination": 0.05},
+                "one_class_svm": {"kernel": "rbf", "nu": 0.05}
+            }
+        }
+        with open(self.meta_path, "w") as f:
+            json.dump(meta, f, indent=2)
 
     def extract_vector(self, feature_dict: Dict[str, Any]) -> np.ndarray:
         vec = []
@@ -78,7 +110,7 @@ class SentinelMLPipeline:
         if_anomaly_prob = float(1.0 / (1.0 + np.exp(if_score_raw * 5.0)))
         svm_anomaly_prob = float(1.0 / (1.0 + np.exp(svm_score_raw * 5.0)))
         
-        ensemble_prob = float(0.6 * if_anomaly_prob + 0.4 * svm_anomaly_prob)
+        ensemble_prob = float(0.60 * if_anomaly_prob + 0.40 * svm_anomaly_prob)
         is_anomaly = bool(ensemble_prob > 0.45 or if_pred == -1 or svm_pred == -1)
         
         confidence = float(np.clip(abs(ensemble_prob - 0.5) * 2.0, 0.60, 0.99))
