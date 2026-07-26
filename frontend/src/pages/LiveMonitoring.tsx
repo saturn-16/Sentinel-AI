@@ -96,10 +96,15 @@ export const LiveMonitoring: React.FC = () => {
           <tbody className="divide-y divide-slate-800/60 font-medium text-slate-300">
             {filteredEvents.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-4 py-12 text-center text-slate-500">
-                  {liveEvents.length === 0
-                    ? 'Connecting to live WebSocket event bus...'
-                    : 'No events match the selected filters.'}
+                <td colSpan={8} className="px-4 py-12 text-center text-slate-400">
+                  {liveEvents.length === 0 ? (
+                    <div className="space-y-2">
+                      <div className="font-bold text-slate-200">WebSocket Connected • Awaiting Traffic</div>
+                      <div className="text-xs text-slate-500">Click <span className="text-blue-400 font-semibold">"Inject Scenario"</span> on the Dashboard to simulate live authentication events.</div>
+                    </div>
+                  ) : (
+                    'No events match the selected filters.'
+                  )}
                 </td>
               </tr>
             ) : (

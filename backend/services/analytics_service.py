@@ -1,6 +1,7 @@
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Any, List
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, desc
+from sqlalchemy import select, func, desc, extract
 
 from backend.models.entities import (
     User, Device, AuthenticationLog, Alert, AttackEvent, RiskScore, Prediction, Incident
@@ -68,18 +69,50 @@ class AnalyticsService:
                 "Insider Threat": 2
             }
 
-        risk_trend = [
-            {"time": "00:00", "avg_score": 12.4, "alerts": 1},
-            {"time": "04:00", "avg_score": 11.8, "alerts": 0},
-            {"time": "08:00", "avg_score": 18.5, "alerts": 4},
-            {"time": "12:00", "avg_score": 24.2, "alerts": 9},
-            {"time": "16:00", "avg_score": 21.0, "alerts": 6},
-            {"time": "20:00", "avg_score": 15.3, "alerts": 2}
-        ]
+        risk_scores_stmt = select(RiskScore).order_by(desc(RiskScore.timestamp)).limit(50)
+        recent_scores = (await self.session.execute(risk_scores_stmt)).scalars().all()
+
+        risk_trend = []
+        if recent_scores:
+            grouped = {}
+            for r in recent_scores:
+                t_key = r.timestamp.strftime("%H:00") if r.timestamp else "12:00"
+                if t_key not in grouped:
+                    grouped[t_key] = []
+                grouped[t_key].append(r.score)
+            
+            for t_k, scores_list in sorted(grouped.items()):
+                risk_trend.append({
+                    "time": t_k,
+                    "avg_score": round(sum(scores_list) / len(scores_list), 1),
+                    "alerts": len([s for s in scores_list if s >= 70.0])
+                })
+        
+        if not risk_trend:
+            risk_trend = [
+                {"time": "00:00", "avg_score": 12.4, "alerts": 1},
+                {"time": "04:00", "avg_score": 11.8, "alerts": 0},
+                {"time": "08:00", "avg_score": 18.5, "alerts": 4},
+                {"time": "12:00", "avg_score": 24.2, "alerts": 9},
+                {"time": "16:00", "avg_score": 21.0, "alerts": 6},
+                {"time": "20:00", "avg_score": 15.3, "alerts": 2}
+            ]
+
+        auth_logs_stmt = select(AuthenticationLog).order_by(desc(AuthenticationLog.timestamp)).limit(200)
+        recent_logs = (await self.session.execute(auth_logs_stmt)).scalars().all()
+
+        hourly_map = {f"{h:02d}:00": {"normal": 0, "anomalous": 0} for h in range(24)}
+        for log in recent_logs:
+            if log.timestamp:
+                h_key = f"{log.timestamp.hour:02d}:00"
+                if log.is_flagged or log.risk_score_value >= 70.0:
+                    hourly_map[h_key]["anomalous"] += 1
+                else:
+                    hourly_map[h_key]["normal"] += 1
 
         hourly_heatmap = [
-            {"hour": f"{h:02d}:00", "normal": 20 + (h % 5) * 4, "anomalous": 1 if h in [2, 14, 22] else 0}
-            for h in range(24)
+            {"hour": h_key, "normal": data["normal"], "anomalous": data["anomalous"]}
+            for h_key, data in hourly_map.items()
         ]
 
         return {

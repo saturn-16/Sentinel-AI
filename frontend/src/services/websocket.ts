@@ -13,8 +13,10 @@ class SOCWebSocketClient {
     }
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.host;
-    const wsUrl = `${protocol}//${host}/api/v1/ws`;
+    const hostname = window.location.hostname || 'localhost';
+    const port = window.location.port === '3000' ? '8000' : window.location.port;
+    const portStr = port ? `:${port}` : '';
+    const wsUrl = `${protocol}//${hostname}${portStr}/api/v1/ws`;
 
     this.socket = new WebSocket(wsUrl);
 
