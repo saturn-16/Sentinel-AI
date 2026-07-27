@@ -35,23 +35,19 @@ const queryClient = new QueryClient({
 const ProtectedAppRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
   if (isLoading) {
-    return <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center text-xs font-mono text-slate-900">Loading SentinelAI Session...</div>;
+    return (
+      <div className="min-h-screen bg-[#FAFAFA] flex flex-col items-center justify-center p-6 space-y-4 font-mono">
+        <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+        <div className="text-xs font-bold uppercase tracking-widest text-slate-800">
+          Connecting SentinelAI Security Engine...
+        </div>
+      </div>
+    );
   }
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
   return <SOCLayout>{children}</SOCLayout>;
-};
-
-const ProtectedStandaloneRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuthStore();
-  if (isLoading) {
-    return <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center text-xs font-mono text-slate-900">Loading SentinelAI Session...</div>;
-  }
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  return <>{children}</>;
 };
 
 export const App: React.FC = () => {
@@ -65,8 +61,8 @@ export const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ProtectedStandaloneRoute><LandingPage /></ProtectedStandaloneRoute>} />
-          <Route path="/landing" element={<ProtectedStandaloneRoute><LandingPage /></ProtectedStandaloneRoute>} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/landing" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<ProtectedAppRoute><Dashboard /></ProtectedAppRoute>} />
           <Route path="/executive" element={<ProtectedAppRoute><ExecutiveDashboard /></ProtectedAppRoute>} />
