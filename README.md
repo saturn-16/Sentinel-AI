@@ -132,14 +132,6 @@ pytest backend/tests/test_sentinel.py -v
 
 ---
 
-## 📸 Screenshots (Interface Preview)
-
-* **Main Executive SOC Dashboard**: Interactive KPI metrics, 24h Risk Trends, Attack Timelines.
-* **Live Ingestion Stream**: Real-time WebSocket feed with instant pause/resume and investigation drawer.
-* **Alert Investigation Workspace**: MITRE ATT&CK card, explainability breakdown, remediation steps, and SOC analyst notes.
-
----
-
 ## 🗺️ Future Roadmap
 
 - [ ] Support for deep learning LSTM sequence anomaly models.
